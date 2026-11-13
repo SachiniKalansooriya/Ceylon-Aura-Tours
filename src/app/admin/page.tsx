@@ -32,8 +32,12 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-900 to-primary-700 px-4">
-      <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-mesh-hero px-4">
+      {/* Decorative blurs */}
+      <div className="absolute top-20 right-20 w-72 h-72 bg-primary-400/15 rounded-full blur-3xl" />
+      <div className="absolute bottom-20 left-20 w-56 h-56 bg-coral-400/10 rounded-full blur-3xl" />
+
+      <div className="relative glass-card p-8 w-full max-w-md">
         <div className="text-center mb-8">
           <span className="text-4xl">🌴</span>
           <h1 className="font-display text-2xl font-bold text-gray-900 mt-3">
@@ -53,7 +57,7 @@ export default function AdminLoginPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
+              className="glass-input w-full"
               placeholder="admin@yourdomain.com"
               required
             />
@@ -67,14 +71,14 @@ export default function AdminLoginPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
+              className="glass-input w-full"
               placeholder="Enter your password"
               required
             />
           </div>
 
           {error && (
-            <p className="text-red-500 text-sm text-center bg-red-50 py-2 rounded-lg">
+            <p className="text-red-500 text-sm text-center bg-red-50/60 backdrop-blur-sm py-2 rounded-xl border border-red-200/50">
               {error}
             </p>
           )}

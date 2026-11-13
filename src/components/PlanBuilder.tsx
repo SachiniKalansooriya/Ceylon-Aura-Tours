@@ -57,10 +57,10 @@ export default function PlanBuilder({ destinations }: PlanBuilderProps) {
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
                 activeCategory === cat
-                  ? "bg-primary-600 text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  ? "bg-gradient-to-r from-primary-500 to-primary-600 text-white shadow-md shadow-primary-500/25"
+                  : "bg-white/50 backdrop-blur-sm border border-white/40 text-gray-600 hover:bg-white/70 hover:border-primary-300"
               }`}
             >
               {cat}
@@ -76,14 +76,14 @@ export default function PlanBuilder({ destinations }: PlanBuilderProps) {
               <button
                 key={dest.slug}
                 onClick={() => toggleDestination(dest.name)}
-                className={`relative p-4 rounded-xl border-2 text-left transition-all ${
+                className={`relative p-4 rounded-xl text-left transition-all duration-200 ${
                   isSelected
-                    ? "border-primary-500 bg-primary-50"
-                    : "border-gray-200 hover:border-gray-300 bg-white"
+                    ? "bg-primary-500/15 border-2 border-primary-400/60 backdrop-blur-sm shadow-md shadow-primary-500/10"
+                    : "bg-white/40 backdrop-blur-sm border-2 border-white/40 hover:bg-white/60 hover:border-primary-300/50"
                 }`}
               >
                 {isSelected && (
-                  <span className="absolute top-2 right-2 bg-primary-500 text-white rounded-full p-0.5">
+                  <span className="absolute top-2 right-2 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-full p-0.5 shadow-sm">
                     <FiCheck className="w-3 h-3" />
                   </span>
                 )}
@@ -101,7 +101,7 @@ export default function PlanBuilder({ destinations }: PlanBuilderProps) {
 
       {/* Summary Sidebar */}
       <div className="lg:col-span-1">
-        <div className="sticky top-24 bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+        <div className="sticky top-24 glass-card p-6">
           <h3 className="font-display text-lg font-bold text-gray-900 mb-4">
             Your Trip Summary
           </h3>
@@ -121,7 +121,7 @@ export default function PlanBuilder({ destinations }: PlanBuilderProps) {
                   <span
                     key={name}
                     onClick={() => toggleDestination(name)}
-                    className="bg-primary-100 text-primary-700 text-xs font-medium px-3 py-1.5 rounded-full cursor-pointer hover:bg-primary-200"
+                    className="bg-primary-500/15 text-primary-700 text-xs font-medium px-3 py-1.5 rounded-full cursor-pointer hover:bg-primary-500/25 border border-primary-400/30 transition-colors"
                   >
                     {name} &times;
                   </span>
@@ -142,7 +142,7 @@ export default function PlanBuilder({ destinations }: PlanBuilderProps) {
               max={20}
               value={travelers}
               onChange={(e) => setTravelers(Number(e.target.value))}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
+              className="glass-input w-full text-sm"
             />
           </div>
 
@@ -157,7 +157,7 @@ export default function PlanBuilder({ destinations }: PlanBuilderProps) {
                 type="date"
                 value={dateFrom}
                 onChange={(e) => setDateFrom(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
+                className="glass-input w-full text-sm"
               />
             </div>
             <div>
@@ -168,7 +168,7 @@ export default function PlanBuilder({ destinations }: PlanBuilderProps) {
                 type="date"
                 value={dateTo}
                 onChange={(e) => setDateTo(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
+                className="glass-input w-full text-sm"
               />
             </div>
           </div>
@@ -177,9 +177,9 @@ export default function PlanBuilder({ destinations }: PlanBuilderProps) {
           <button
             onClick={handleInquire}
             disabled={selected.length === 0}
-            className={`w-full flex items-center justify-center gap-2 py-3 rounded-lg font-semibold text-white transition-all ${
+            className={`w-full flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-white transition-all duration-300 ${
               selected.length > 0
-                ? "bg-green-500 hover:bg-green-600 shadow-md hover:shadow-lg"
+                ? "bg-gradient-to-r from-green-500 to-emerald-600 shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/50 hover:-translate-y-0.5"
                 : "bg-gray-300 cursor-not-allowed"
             }`}
           >

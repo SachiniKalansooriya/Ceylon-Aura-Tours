@@ -26,10 +26,10 @@ export default function AdminDashboard() {
 
       {/* Stats */}
       <div className="grid sm:grid-cols-3 gap-6 mb-10">
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="glass-card p-6">
           <div className="flex items-center gap-3">
-            <div className="bg-primary-100 p-3 rounded-lg">
-              <FiPackage className="w-6 h-6 text-primary-600" />
+            <div className="bg-gradient-to-r from-primary-500 to-primary-600 p-3 rounded-xl shadow-lg shadow-primary-500/20">
+              <FiPackage className="w-6 h-6 text-white" />
             </div>
             <div>
               <p className="text-2xl font-bold text-gray-900">{stats.packages}</p>
@@ -37,10 +37,10 @@ export default function AdminDashboard() {
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="glass-card p-6">
           <div className="flex items-center gap-3">
-            <div className="bg-accent-100 p-3 rounded-lg">
-              <FiMapPin className="w-6 h-6 text-accent-600" />
+            <div className="bg-gradient-to-r from-accent-500 to-accent-600 p-3 rounded-xl shadow-lg shadow-accent-500/20">
+              <FiMapPin className="w-6 h-6 text-white" />
             </div>
             <div>
               <p className="text-2xl font-bold text-gray-900">{stats.destinations}</p>
@@ -48,10 +48,10 @@ export default function AdminDashboard() {
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="glass-card p-6">
           <div className="flex items-center gap-3">
-            <div className="bg-green-100 p-3 rounded-lg">
-              <FiPackage className="w-6 h-6 text-green-600" />
+            <div className="bg-gradient-to-r from-green-500 to-emerald-600 p-3 rounded-xl shadow-lg shadow-green-500/20">
+              <FiPackage className="w-6 h-6 text-white" />
             </div>
             <div>
               <p className="text-2xl font-bold text-gray-900">{stats.inquiries}</p>
@@ -66,16 +66,20 @@ export default function AdminDashboard() {
       <div className="grid sm:grid-cols-2 gap-4">
         <Link
           href="/admin/packages/new"
-          className="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-200 hover:border-primary-300 hover:bg-primary-50 transition"
+          className="glass-card flex items-center gap-3 p-4 hover:bg-primary-50/50"
         >
-          <FiPlus className="w-5 h-5 text-primary-600" />
+          <div className="bg-primary-100/60 p-2 rounded-lg">
+            <FiPlus className="w-5 h-5 text-primary-600" />
+          </div>
           <span className="font-medium text-gray-900">Add New Package</span>
         </Link>
         <Link
           href="/admin/destinations/new"
-          className="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-200 hover:border-primary-300 hover:bg-primary-50 transition"
+          className="glass-card flex items-center gap-3 p-4 hover:bg-primary-50/50"
         >
-          <FiPlus className="w-5 h-5 text-primary-600" />
+          <div className="bg-primary-100/60 p-2 rounded-lg">
+            <FiPlus className="w-5 h-5 text-primary-600" />
+          </div>
           <span className="font-medium text-gray-900">Add New Destination</span>
         </Link>
       </div>

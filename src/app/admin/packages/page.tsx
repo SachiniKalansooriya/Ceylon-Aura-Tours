@@ -63,7 +63,7 @@ export default function AdminPackagesPage() {
       </div>
 
       {packages.length === 0 ? (
-        <div className="text-center py-20 bg-white rounded-xl border border-gray-200">
+        <div className="text-center py-20 glass-card">
           <p className="text-gray-400 mb-4">No packages yet</p>
           <Link href="/admin/packages/new" className="btn-primary text-sm">
             <FiPlus className="w-4 h-4" />
@@ -71,9 +71,9 @@ export default function AdminPackagesPage() {
           </Link>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="glass-card overflow-hidden">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 border-b border-gray-200">
+            <thead className="bg-white/40 border-b border-white/30">
               <tr>
                 <th className="text-left py-3 px-4 font-medium text-gray-600">Title</th>
                 <th className="text-left py-3 px-4 font-medium text-gray-600">Days</th>
@@ -82,9 +82,9 @@ export default function AdminPackagesPage() {
                 <th className="text-right py-3 px-4 font-medium text-gray-600">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-white/20">
               {packages.map((pkg) => (
-                <tr key={pkg.id} className="hover:bg-gray-50">
+                <tr key={pkg.id} className="hover:bg-white/30 transition-colors">
                   <td className="py-3 px-4">
                     <span className="font-medium text-gray-900">{pkg.title}</span>
                     {pkg.featured && (

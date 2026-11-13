@@ -15,7 +15,7 @@ export default function AdminSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-64 bg-gray-900 text-gray-300 min-h-screen p-6 flex flex-col">
+    <aside className="w-64 glass-sidebar text-gray-300 min-h-screen p-6 flex flex-col">
       <div className="mb-8">
         <h2 className="text-white font-display font-bold text-lg">Admin Panel</h2>
         <p className="text-xs text-gray-500 mt-1">Manage your tours</p>
@@ -29,10 +29,10 @@ export default function AdminSidebar() {
             <Link
               key={link.href}
               href={link.href}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
                 active
-                  ? "bg-primary-600 text-white"
-                  : "hover:bg-gray-800 hover:text-white"
+                  ? "bg-primary-600/80 text-white shadow-lg shadow-primary-600/20 backdrop-blur-sm"
+                  : "hover:bg-white/10 hover:text-white"
               }`}
             >
               <Icon className="w-5 h-5" />
@@ -42,17 +42,17 @@ export default function AdminSidebar() {
         })}
       </nav>
 
-      <div className="space-y-2 mt-auto pt-6 border-t border-gray-800">
+      <div className="space-y-2 mt-auto pt-6 border-t border-white/10">
         <Link
           href="/"
-          className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm hover:bg-gray-800 hover:text-white transition-colors"
+          className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm hover:bg-white/10 hover:text-white transition-all duration-200"
         >
           <FiArrowLeft className="w-5 h-5" />
           View Site
         </Link>
         <button
           onClick={() => signOut({ callbackUrl: "/admin" })}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm hover:bg-red-900/30 hover:text-red-400 transition-colors"
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm hover:bg-red-500/20 hover:text-red-400 transition-all duration-200"
         >
           <FiLogOut className="w-5 h-5" />
           Sign Out

@@ -15,7 +15,7 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
 
   if (status === "loading") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-mesh-light">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600" />
       </div>
     );
@@ -29,7 +29,7 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-mesh-light">
       <AdminSidebar />
       <div className="flex-1 p-6 lg:p-10 overflow-auto">{children}</div>
     </div>

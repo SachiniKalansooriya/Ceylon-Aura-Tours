@@ -18,19 +18,21 @@ export default async function PlanPage() {
   });
 
   return (
-    <div className="section-padding py-12 lg:py-16">
-      <div className="mb-10">
-        <h1 className="font-display text-4xl font-bold text-gray-900">
-          Plan Your Trip
-        </h1>
-        <p className="text-gray-500 mt-3 max-w-2xl">
-          Select the destinations you want to visit, choose your dates, and send
-          your wishlist to us on WhatsApp. We&apos;ll reply with a custom
-          itinerary and quote.
-        </p>
-      </div>
+    <div className="bg-mesh-light min-h-screen">
+      <div className="section-padding py-12 lg:py-16">
+        <div className="mb-10">
+          <h1 className="font-display text-4xl font-bold text-gray-900">
+            Plan Your Trip
+          </h1>
+          <p className="text-gray-500 mt-3 max-w-2xl">
+            Select the destinations you want to visit, choose your dates, and send
+            your wishlist to us on WhatsApp. We&apos;ll reply with a custom
+            itinerary and quote.
+          </p>
+        </div>
 
-      <PlanBuilder destinations={destinations} />
+        <PlanBuilder destinations={destinations} />
+      </div>
     </div>
   );
 }

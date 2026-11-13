@@ -23,14 +23,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/contact`, lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.5 },
   ];
 
-  const packagePages = packages.map((pkg) => ({
+  const packagePages = packages.map((pkg: any) => ({
     url: `${baseUrl}/packages/${pkg.slug}`,
     lastModified: pkg.updatedAt,
     changeFrequency: "weekly" as const,
     priority: 0.8,
   }));
 
-  const destinationPages = destinations.map((dest) => ({
+  const destinationPages = destinations.map((dest: any) => ({
     url: `${baseUrl}/destinations/${dest.slug}`,
     lastModified: dest.updatedAt,
     changeFrequency: "weekly" as const,

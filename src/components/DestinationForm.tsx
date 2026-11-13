@@ -129,7 +129,7 @@ export default function DestinationForm({ initialData }: DestinationFormProps) {
               slug: isEditing ? form.slug : slugify(name, { lower: true, strict: true }),
             });
           }}
-          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 outline-none"
+          className="glass-input w-full"
           placeholder="e.g. Sigiriya"
           required
         />
@@ -143,7 +143,7 @@ export default function DestinationForm({ initialData }: DestinationFormProps) {
             type="text"
             value={form.slug}
             onChange={(e) => setForm({ ...form, slug: e.target.value })}
-            className="flex-1 border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 outline-none"
+            className="glass-input flex-1"
           />
         </div>
       </div>
@@ -153,7 +153,7 @@ export default function DestinationForm({ initialData }: DestinationFormProps) {
         <select
           value={form.category}
           onChange={(e) => setForm({ ...form, category: e.target.value })}
-          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 outline-none"
+          className="glass-input w-full"
         >
           {CATEGORIES.map((cat) => (
             <option key={cat} value={cat}>{cat}</option>
@@ -167,7 +167,7 @@ export default function DestinationForm({ initialData }: DestinationFormProps) {
           type="text"
           value={form.shortDesc}
           onChange={(e) => setForm({ ...form, shortDesc: e.target.value })}
-          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 outline-none"
+          className="glass-input w-full"
           placeholder="One-liner, e.g. Ancient rock fortress with stunning views"
         />
       </div>
@@ -179,7 +179,7 @@ export default function DestinationForm({ initialData }: DestinationFormProps) {
           type="file"
           accept="image/*"
           onChange={(e) => setImageFile(e.target.files?.[0] || null)}
-          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm"
+          className="glass-input w-full text-sm"
         />
       </div>
 
@@ -189,7 +189,7 @@ export default function DestinationForm({ initialData }: DestinationFormProps) {
           value={form.description}
           onChange={(e) => setForm({ ...form, description: e.target.value })}
           rows={6}
-          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 outline-none"
+          className="glass-input w-full"
           required
         />
       </div>
@@ -200,12 +200,12 @@ export default function DestinationForm({ initialData }: DestinationFormProps) {
           type="text"
           value={highlightsText}
           onChange={(e) => setHighlightsText(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 outline-none"
+          className="glass-input w-full"
           placeholder="UNESCO World Heritage Site, Ancient frescoes, Lion's Paw Terrace"
         />
       </div>
 
-      <div className="border-t border-gray-200 pt-6">
+      <div className="border-t border-white/30 pt-6">
         <h3 className="font-semibold text-gray-900 mb-4">SEO Settings</h3>
         <div className="space-y-4">
           <div>
@@ -214,7 +214,7 @@ export default function DestinationForm({ initialData }: DestinationFormProps) {
               type="text"
               value={form.seoTitle}
               onChange={(e) => setForm({ ...form, seoTitle: e.target.value })}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 outline-none"
+              className="glass-input w-full"
             />
           </div>
           <div>
@@ -223,7 +223,7 @@ export default function DestinationForm({ initialData }: DestinationFormProps) {
               value={form.seoDesc}
               onChange={(e) => setForm({ ...form, seoDesc: e.target.value })}
               rows={2}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 outline-none"
+              className="glass-input w-full"
             />
           </div>
         </div>
@@ -240,7 +240,7 @@ export default function DestinationForm({ initialData }: DestinationFormProps) {
         </label>
       </div>
 
-      {error && <p className="text-red-500 text-sm bg-red-50 p-3 rounded-lg">{error}</p>}
+      {error && <p className="text-red-500 text-sm bg-red-50/60 backdrop-blur-sm p-3 rounded-xl border border-red-200/50">{error}</p>}
 
       <div className="flex items-center gap-4">
         <button type="submit" disabled={saving} className="btn-primary disabled:opacity-50">

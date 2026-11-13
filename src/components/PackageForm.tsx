@@ -186,7 +186,7 @@ export default function PackageForm({ initialData }: PackageFormProps) {
               }));
             }
           }}
-          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 outline-none"
+          className="glass-input w-full"
           placeholder="e.g. 5-Day Cultural Triangle Tour"
           required
         />
@@ -203,7 +203,7 @@ export default function PackageForm({ initialData }: PackageFormProps) {
             type="text"
             value={form.slug}
             onChange={(e) => setForm({ ...form, slug: e.target.value })}
-            className="flex-1 border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 outline-none"
+            className="glass-input flex-1"
           />
         </div>
       </div>
@@ -218,7 +218,7 @@ export default function PackageForm({ initialData }: PackageFormProps) {
             type="text"
             value={form.duration}
             onChange={(e) => setForm({ ...form, duration: e.target.value })}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 outline-none"
+            className="glass-input w-full"
             placeholder="e.g. 5 Days / 4 Nights"
             required
           />
@@ -232,7 +232,7 @@ export default function PackageForm({ initialData }: PackageFormProps) {
             min={1}
             value={form.durationDays}
             onChange={(e) => setForm({ ...form, durationDays: Number(e.target.value) })}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 outline-none"
+            className="glass-input w-full"
             required
           />
         </div>
@@ -250,7 +250,7 @@ export default function PackageForm({ initialData }: PackageFormProps) {
             step="0.01"
             value={form.price}
             onChange={(e) => setForm({ ...form, price: e.target.value })}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 outline-none"
+            className="glass-input w-full"
             placeholder="e.g. 350"
           />
         </div>
@@ -262,7 +262,7 @@ export default function PackageForm({ initialData }: PackageFormProps) {
             type="text"
             value={form.priceLabel}
             onChange={(e) => setForm({ ...form, priceLabel: e.target.value })}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 outline-none"
+            className="glass-input w-full"
             placeholder="e.g. per person"
           />
         </div>
@@ -280,7 +280,7 @@ export default function PackageForm({ initialData }: PackageFormProps) {
           type="file"
           accept="image/*"
           onChange={(e) => setImageFile(e.target.files?.[0] || null)}
-          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm"
+          className="glass-input w-full text-sm"
         />
       </div>
 
@@ -293,7 +293,7 @@ export default function PackageForm({ initialData }: PackageFormProps) {
           value={form.description}
           onChange={(e) => setForm({ ...form, description: e.target.value })}
           rows={5}
-          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 outline-none"
+          className="glass-input w-full"
           required
         />
       </div>
@@ -307,7 +307,7 @@ export default function PackageForm({ initialData }: PackageFormProps) {
           type="text"
           value={destinationsText}
           onChange={(e) => setDestinationsText(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 outline-none"
+          className="glass-input w-full"
           placeholder="Sigiriya, Kandy, Ella, Galle"
         />
       </div>
@@ -321,7 +321,7 @@ export default function PackageForm({ initialData }: PackageFormProps) {
           type="text"
           value={highlightsText}
           onChange={(e) => setHighlightsText(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 outline-none"
+          className="glass-input w-full"
           placeholder="Climb Sigiriya Rock, Visit Temple of the Tooth, Scenic train ride"
         />
       </div>
@@ -335,7 +335,7 @@ export default function PackageForm({ initialData }: PackageFormProps) {
           value={itineraryText}
           onChange={(e) => setItineraryText(e.target.value)}
           rows={10}
-          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 outline-none font-mono text-sm"
+          className="glass-input w-full font-mono text-sm"
           placeholder={`Day 1: Arrival & Colombo\nAirport pickup, city tour, hotel check-in.\n\nDay 2: Sigiriya & Dambulla\nClimb Sigiriya Rock Fortress, visit Dambulla Cave Temple.`}
         />
       </div>
@@ -350,7 +350,7 @@ export default function PackageForm({ initialData }: PackageFormProps) {
             value={inclusionsText}
             onChange={(e) => setInclusionsText(e.target.value)}
             rows={3}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 outline-none text-sm"
+            className="glass-input w-full text-sm"
             placeholder="Private vehicle, Driver, Hotel accommodation"
           />
         </div>
@@ -362,14 +362,14 @@ export default function PackageForm({ initialData }: PackageFormProps) {
             value={exclusionsText}
             onChange={(e) => setExclusionsText(e.target.value)}
             rows={3}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 outline-none text-sm"
+            className="glass-input w-full text-sm"
             placeholder="Flights, Entrance tickets, Meals"
           />
         </div>
       </div>
 
       {/* SEO */}
-      <div className="border-t border-gray-200 pt-6">
+      <div className="border-t border-white/30 pt-6">
         <h3 className="font-semibold text-gray-900 mb-4">SEO Settings</h3>
         <div className="space-y-4">
           <div>
@@ -380,7 +380,7 @@ export default function PackageForm({ initialData }: PackageFormProps) {
               type="text"
               value={form.seoTitle}
               onChange={(e) => setForm({ ...form, seoTitle: e.target.value })}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 outline-none"
+              className="glass-input w-full"
               placeholder="Leave blank to use package title"
             />
           </div>
@@ -392,7 +392,7 @@ export default function PackageForm({ initialData }: PackageFormProps) {
               value={form.seoDesc}
               onChange={(e) => setForm({ ...form, seoDesc: e.target.value })}
               rows={2}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary-500 outline-none"
+              className="glass-input w-full"
               placeholder="Leave blank to use first 160 chars of description"
             />
           </div>
@@ -422,7 +422,7 @@ export default function PackageForm({ initialData }: PackageFormProps) {
       </div>
 
       {error && (
-        <p className="text-red-500 text-sm bg-red-50 p-3 rounded-lg">{error}</p>
+        <p className="text-red-500 text-sm bg-red-50/60 backdrop-blur-sm p-3 rounded-xl border border-red-200/50">{error}</p>
       )}
 
       <div className="flex items-center gap-4">

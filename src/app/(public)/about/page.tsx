@@ -1,5 +1,7 @@
 import { Metadata } from "next";
 import { FiCheckCircle } from "react-icons/fi";
+import ScrollReveal from "@/components/motion/ScrollReveal";
+import { PageHeader } from "@/components/motion/PageTransition";
 
 const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "Ceylon Paradise Tours";
 
@@ -10,32 +12,38 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="section-padding py-12 lg:py-16">
-      <div className="max-w-3xl mx-auto">
-        <h1 className="font-display text-4xl font-bold text-gray-900 mb-6">
-          About {siteName}
-        </h1>
+    <div className="bg-mesh-light min-h-screen">
+      <div className="section-padding py-12 lg:py-16">
+        <div className="max-w-3xl mx-auto">
+          <PageHeader>
+            <h1 className="font-display text-4xl font-bold text-gray-900 mb-6">
+              About {siteName}
+            </h1>
+          </PageHeader>
 
-        <div className="prose prose-gray max-w-none">
-          <p className="text-lg text-gray-600 leading-relaxed">
-            We are a licensed Sri Lankan tour operator dedicated to creating
-            unforgettable travel experiences. Every tour is private, fully
-            customizable, and led by experienced local drivers who know the
-            island inside out.
-          </p>
+          <ScrollReveal delay={0.1}>
+            <div className="glass-card p-8 mb-10">
+              <p className="text-lg text-gray-600 leading-relaxed">
+                We are a licensed Sri Lankan tour operator dedicated to creating
+                unforgettable travel experiences. Every tour is private, fully
+                customizable, and led by experienced local drivers who know the
+                island inside out.
+              </p>
 
-          <p className="text-gray-600 leading-relaxed mt-4">
-            Whether you&apos;re chasing ancient ruins in Anuradhapura, spotting
-            leopards in Yala, riding the scenic train through Ella, or soaking
-            up the sun on the southern coast, we&apos;ll design the perfect
-            itinerary around your interests, your pace, and your budget.
-          </p>
-        </div>
+              <p className="text-gray-600 leading-relaxed mt-4">
+                Whether you&apos;re chasing ancient ruins in Anuradhapura, spotting
+                leopards in Yala, riding the scenic train through Ella, or soaking
+                up the sun on the southern coast, we&apos;ll design the perfect
+                itinerary around your interests, your pace, and your budget.
+              </p>
+            </div>
+          </ScrollReveal>
 
-        <div className="mt-12">
-          <h2 className="font-display text-2xl font-bold text-gray-900 mb-6">
-            Why Travel With Us
-          </h2>
+          <ScrollReveal delay={0.2}>
+            <h2 className="font-display text-2xl font-bold text-gray-900 mb-6">
+              Why Travel With Us
+            </h2>
+          </ScrollReveal>
           <div className="grid sm:grid-cols-2 gap-4">
             {[
               "Licensed and registered operator",
@@ -46,14 +54,13 @@ export default function AboutPage() {
               "No hidden costs or shop stops",
               "Flexible payment options",
               "Free cancellation on most bookings",
-            ].map((item) => (
-              <div
-                key={item}
-                className="flex items-center gap-3 text-gray-700"
-              >
-                <FiCheckCircle className="w-5 h-5 text-primary-500 flex-shrink-0" />
-                <span>{item}</span>
-              </div>
+            ].map((item, i) => (
+              <ScrollReveal key={item} delay={0.1 + i * 0.07} direction={i % 2 === 0 ? "left" : "right"}>
+                <div className="flex items-center gap-3 text-gray-700 glass-card p-4">
+                  <FiCheckCircle className="w-5 h-5 text-primary-500 flex-shrink-0" />
+                  <span>{item}</span>
+                </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>
