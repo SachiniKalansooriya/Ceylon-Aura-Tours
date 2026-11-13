@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  role      String   @default("admin")
+  createdAt DateTime @default(now())
+}
+
+model Package {
+  id            String   @id @default(cuid())
+  title         String
+  slug          String   @unique
+  description   String
+  highlights    String   // JSON array stored as string
+  duration      String   // e.g. "5 Days / 4 Nights"
+  durationDays  Int
+  price         Float?   // null means "Contact for price"
+  priceLabel    String?  // e.g. "per person" or "per vehicle"
+  image         String?  // main image path
+  images        String?  // JSON array of image paths
+  destinations  String   // JSON array of destination slugs
+  itinerary     String?  // JSON array of day-by-day plan
+  inclusions    String?  // JSON array
+  exclusions    String?  // JSON array
+  seoTitle      String?
+  seoDesc       String?
+  featured      Boolean  @default(false)
+  published     Boolean  @default(true)
+  sortOrder     Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Destination {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String
+  shortDesc   String?  // one-liner for cards
+  image       String?
+  images      String?  // JSON array
+  category    String   // e.g. "Culture & Heritage", "Wildlife & Safari"
+  highlights  String?  // JSON array
+  seoTitle    String?
+  seoDesc     String?
+  featured    Boolean  @default(false)
+  published   Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Inquiry {
+  id           String   @id @default(cuid())
+  name         String?
+  phone        String?
+  destinations String   // JSON array of selected destinations
+  travelers    Int?
+  dateFrom     String?
+  dateTo       String?
+  message      String?
+  sentVia      String   @default("whatsapp")
+  createdAt    DateTime @default(now())
+}
+
+model SiteSetting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String
+}
