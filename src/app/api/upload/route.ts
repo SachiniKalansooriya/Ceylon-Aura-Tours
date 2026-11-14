@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { writeFile } from "fs/promises";
-import { join } from "path";
+import { cloudinary } from "@/lib/cloudinary";
 
 export async function POST(request: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -29,15 +28,12 @@ export async function POST(request: NextRequest) {
   }
 
   const bytes = await file.arrayBuffer();
-  const buffer = Buffer.from(bytes);
+  const base64 = Buffer.from(bytes).toString("base64");
+  const dataUrl = `data:${file.type};base64,${base64}`;
 
-  // Generate unique filename
-  const ext = file.name.split(".").pop() || "jpg";
-  const fileName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-  const uploadDir = join(process.cwd(), "public", "uploads");
-  const filePath = join(uploadDir, fileName);
+  const result = await cloudinary.uploader.upload(dataUrl, {
+    folder: "travel-tour",
+  });
 
-  await writeFile(filePath, buffer);
-
-  return NextResponse.json({ path: `/uploads/${fileName}` });
+  return NextResponse.json({ path: result.secure_url });
 }
