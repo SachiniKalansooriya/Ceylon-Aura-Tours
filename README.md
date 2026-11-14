@@ -17,7 +17,7 @@ A modern, SEO-optimized tour booking website built with Next.js. Features an adm
 - **ORM**: Prisma
 - **Auth**: NextAuth.js
 - **Styling**: Tailwind CSS
-- **Deployment**: Hostinger Managed Node.js Hosting
+- **Deployment**: Vercel (with Turso as the production database)
 
 ## Quick Start (Local Development)
 
