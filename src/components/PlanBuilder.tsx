@@ -59,8 +59,8 @@ export default function PlanBuilder({ destinations }: PlanBuilderProps) {
               onClick={() => setActiveCategory(cat)}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
                 activeCategory === cat
-                  ? "bg-gradient-to-r from-primary-500 to-primary-600 text-white shadow-md shadow-primary-500/25"
-                  : "bg-white/50 backdrop-blur-sm border border-white/40 text-gray-600 hover:bg-white/70 hover:border-primary-300"
+                  ? "bg-gradient-to-r from-primary-900 to-primary-950 text-white shadow-md shadow-primary-900/25"
+                  : "bg-white/50 backdrop-blur-sm border border-white/40 text-gray-600 hover:bg-white/70 hover:border-primary-900/30"
               }`}
             >
               {cat}
@@ -78,12 +78,12 @@ export default function PlanBuilder({ destinations }: PlanBuilderProps) {
                 onClick={() => toggleDestination(dest.name)}
                 className={`relative p-4 rounded-xl text-left transition-all duration-200 ${
                   isSelected
-                    ? "bg-primary-500/15 border-2 border-primary-400/60 backdrop-blur-sm shadow-md shadow-primary-500/10"
-                    : "bg-white/40 backdrop-blur-sm border-2 border-white/40 hover:bg-white/60 hover:border-primary-300/50"
+                    ? "bg-primary-900/10 border-2 border-primary-900/40 backdrop-blur-sm shadow-md shadow-primary-900/10"
+                    : "bg-white/40 backdrop-blur-sm border-2 border-white/40 hover:bg-white/60 hover:border-primary-900/30"
                 }`}
               >
                 {isSelected && (
-                  <span className="absolute top-2 right-2 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-full p-0.5 shadow-sm">
+                  <span className="absolute top-2 right-2 bg-gradient-to-r from-primary-900 to-primary-950 text-white rounded-full p-0.5 shadow-sm">
                     <FiCheck className="w-3 h-3" />
                   </span>
                 )}
@@ -121,7 +121,7 @@ export default function PlanBuilder({ destinations }: PlanBuilderProps) {
                   <span
                     key={name}
                     onClick={() => toggleDestination(name)}
-                    className="bg-primary-500/15 text-primary-700 text-xs font-medium px-3 py-1.5 rounded-full cursor-pointer hover:bg-primary-500/25 border border-primary-400/30 transition-colors"
+                    className="bg-primary-900/10 text-primary-900 text-xs font-medium px-3 py-1.5 rounded-full cursor-pointer hover:bg-primary-900/20 border border-primary-900/25 transition-colors"
                   >
                     {name} &times;
                   </span>
@@ -177,9 +177,9 @@ export default function PlanBuilder({ destinations }: PlanBuilderProps) {
           <button
             onClick={handleInquire}
             disabled={selected.length === 0}
-            className={`w-full flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-white transition-all duration-300 ${
+            className={`w-full flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-black transition-all duration-300 ${
               selected.length > 0
-                ? "bg-gradient-to-r from-green-500 to-emerald-600 shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/50 hover:-translate-y-0.5"
+                ? "bg-[#BCD5AC] shadow-lg shadow-green-500/30 hover:shadow-xl hover:shadow-green-500/50 hover:-translate-y-0.5"
                 : "bg-gray-300 cursor-not-allowed"
             }`}
           >

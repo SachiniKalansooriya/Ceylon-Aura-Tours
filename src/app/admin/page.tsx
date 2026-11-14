@@ -3,6 +3,7 @@
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState("");
@@ -39,8 +40,14 @@ export default function AdminLoginPage() {
 
       <div className="relative glass-card p-8 w-full max-w-md">
         <div className="text-center mb-8">
-          <span className="text-4xl">🌴</span>
-          <h1 className="font-display text-2xl font-bold text-gray-900 mt-3">
+          <Image
+            src="/images/logo-ceylon-aura.png"
+            alt="Ceylon Aura Tours"
+            width={160}
+            height={60}
+            className="mx-auto"
+          />
+          <h1 className="font-display text-2xl font-bold text-gray-900 mt-4">
             Admin Login
           </h1>
           <p className="text-sm text-gray-500 mt-1">

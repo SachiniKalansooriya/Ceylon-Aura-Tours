@@ -1,9 +1,10 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
-import { FiGrid, FiPackage, FiMapPin, FiLogOut, FiArrowLeft } from "react-icons/fi";
+import { FiGrid, FiPackage, FiMapPin, FiLogOut, FiArrowLeft, FiMenu, FiX, FiAlertTriangle } from "react-icons/fi";
 
 const links = [
   { href: "/admin/dashboard", label: "Dashboard", icon: FiGrid },
@@ -13,51 +14,142 @@ const links = [
 
 export default function AdminSidebar() {
   const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+  const [showLogout, setShowLogout] = useState(false);
+
+  // Close sidebar on route change (mobile)
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  // Prevent body scroll when sidebar is open on mobile
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
 
   return (
-    <aside className="w-64 glass-sidebar text-gray-300 min-h-screen p-6 flex flex-col">
-      <div className="mb-8">
-        <h2 className="text-white font-display font-bold text-lg">Admin Panel</h2>
-        <p className="text-xs text-gray-500 mt-1">Manage your tours</p>
-      </div>
-
-      <nav className="flex-1 space-y-1">
-        {links.map((link) => {
-          const Icon = link.icon;
-          const active = pathname.startsWith(link.href);
-          return (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
-                active
-                  ? "bg-primary-600/80 text-white shadow-lg shadow-primary-600/20 backdrop-blur-sm"
-                  : "hover:bg-white/10 hover:text-white"
-              }`}
-            >
-              <Icon className="w-5 h-5" />
-              {link.label}
-            </Link>
-          );
-        })}
-      </nav>
-
-      <div className="space-y-2 mt-auto pt-6 border-t border-white/10">
-        <Link
-          href="/"
-          className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm hover:bg-white/10 hover:text-white transition-all duration-200"
-        >
-          <FiArrowLeft className="w-5 h-5" />
-          View Site
-        </Link>
+    <>
+      {/* Mobile top bar */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-gray-900/95 backdrop-blur-xl border-b border-white/10 px-4 py-3 flex items-center justify-between">
+        <h2 className="text-white font-display font-bold text-base">Admin Panel</h2>
         <button
-          onClick={() => signOut({ callbackUrl: "/admin" })}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm hover:bg-red-500/20 hover:text-red-400 transition-all duration-200"
+          onClick={() => setOpen(!open)}
+          className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
         >
-          <FiLogOut className="w-5 h-5" />
-          Sign Out
+          {open ? <FiX className="w-5 h-5" /> : <FiMenu className="w-5 h-5" />}
         </button>
       </div>
-    </aside>
+
+      {/* Mobile backdrop */}
+      {open && (
+        <div
+          className="lg:hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+          onClick={() => setOpen(false)}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside
+        className={`
+          fixed lg:sticky top-0 left-0 z-50 lg:z-auto
+          w-72 lg:w-64 h-full lg:h-auto min-h-screen
+          glass-sidebar text-gray-300 p-6 flex flex-col
+          transform transition-transform duration-300 ease-out
+          ${open ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
+          pt-20 lg:pt-6
+        `}
+      >
+        {/* Header — desktop only (mobile has top bar) */}
+        <div className="mb-8 hidden lg:block">
+          <h2 className="text-white font-display font-bold text-lg">Admin Panel</h2>
+          <p className="text-xs text-gray-500 mt-1">Manage your tours</p>
+        </div>
+
+        <nav className="flex-1 space-y-1">
+          {links.map((link) => {
+            const Icon = link.icon;
+            const active = pathname.startsWith(link.href);
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+                  active
+                    ? "bg-primary-900/80 text-white shadow-lg shadow-primary-900/20 backdrop-blur-sm"
+                    : "hover:bg-white/10 hover:text-white"
+                }`}
+              >
+                <Icon className="w-5 h-5" />
+                {link.label}
+              </Link>
+            );
+          })}
+        </nav>
+
+        <div className="space-y-2 mt-auto pt-6 border-t border-white/10">
+          <Link
+            href="/"
+            className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm hover:bg-white/10 hover:text-white transition-all duration-200"
+          >
+            <FiArrowLeft className="w-5 h-5" />
+            View Site
+          </Link>
+          <button
+            onClick={() => setShowLogout(true)}
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm hover:bg-red-500/20 hover:text-red-400 transition-all duration-200"
+          >
+            <FiLogOut className="w-5 h-5" />
+            Sign Out
+          </button>
+        </div>
+      </aside>
+
+      {/* ───── Sign Out Confirmation Modal ───── */}
+      {showLogout && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+          <div
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={() => setShowLogout(false)}
+          />
+          <div className="relative bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 animate-in fade-in zoom-in-95 duration-200">
+            <button
+              onClick={() => setShowLogout(false)}
+              className="absolute top-4 right-4 p-1 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              <FiX className="w-5 h-5" />
+            </button>
+            <div className="w-14 h-14 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-4">
+              <FiLogOut className="w-7 h-7 text-red-500" />
+            </div>
+            <h3 className="text-lg font-bold text-gray-900 text-center mb-2">
+              Sign Out
+            </h3>
+            <p className="text-sm text-gray-500 text-center mb-6">
+              Are you sure you want to sign out of the admin panel?
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowLogout(false)}
+                className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 text-gray-700 font-semibold text-sm hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => signOut({ callbackUrl: "/admin" })}
+                className="flex-1 px-4 py-2.5 rounded-xl bg-red-500 text-white font-semibold text-sm hover:bg-red-600 transition-colors flex items-center justify-center gap-2"
+              >
+                <FiLogOut className="w-4 h-4" />
+                Sign Out
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

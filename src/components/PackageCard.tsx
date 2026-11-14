@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { FiClock, FiArrowRight } from "react-icons/fi";
+import { FiClock, FiArrowUpRight, FiMapPin } from "react-icons/fi";
 import { formatPrice, parseJSON } from "@/lib/helpers";
 import { motion } from "framer-motion";
 
@@ -42,61 +42,69 @@ export default function PackageCard({
         delay: index * 0.1,
         ease: [0.25, 0.4, 0.25, 1],
       }}
-      whileHover={{ y: -6, transition: { duration: 0.25 } }}
+      whileHover={{ y: -6, transition: { duration: 0.3 } }}
     >
-      <Link href={`/packages/${slug}`} className="glass-card group block overflow-hidden">
-        {/* Image */}
-        <div className="relative h-52 bg-gray-200/50 overflow-hidden">
-          {image ? (
-            <Image
-              src={image}
-              alt={title}
-              fill
-              className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-gray-400 text-4xl bg-gradient-to-br from-primary-100/50 to-accent-100/50">
-              🏝️
-            </div>
-          )}
-          <motion.div
-            className="absolute top-3 left-3 bg-gradient-to-r from-primary-500 to-primary-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg shadow-primary-500/30"
-            initial={{ scale: 0, rotate: -10 }}
-            whileInView={{ scale: 1, rotate: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 + index * 0.1, type: "spring", stiffness: 200, damping: 15 }}
-          >
-            {durationDays} DAYS
-          </motion.div>
+      <Link
+        href={`/packages/${slug}`}
+        className="group block relative rounded-3xl overflow-hidden cursor-pointer"
+        style={{ minHeight: "420px" }}
+      >
+        {/* Background image */}
+        <div className="absolute inset-0 bg-primary-950">
+          <Image
+            src={image || "/images/packages/default.jpg"}
+            alt={title}
+            fill
+            className="object-cover transition-transform duration-700 group-hover:scale-110"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
         </div>
 
-        {/* Content */}
-        <div className="p-5">
-          <h3 className="font-display text-lg font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">
+        {/* Dark gradient overlay — matches story cards */}
+        <div className="package-card-overlay" />
+
+        {/* Top badges */}
+        <div className="absolute top-4 left-4 right-4 flex items-start justify-between z-10">
+          {/* Duration pill */}
+          <span className="inline-flex items-center gap-1.5 bg-white/15 backdrop-blur-md text-white text-xs font-bold px-3.5 py-2 rounded-full border border-white/20">
+            <FiClock className="w-3.5 h-3.5" />
+            {durationDays} Days
+          </span>
+
+          {/* Arrow */}
+          <span className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white/70 group-hover:bg-accent-500 group-hover:border-accent-500 group-hover:text-white transition-all duration-300">
+            <FiArrowUpRight className="w-4 h-4" />
+          </span>
+        </div>
+
+        {/* Bottom content */}
+        <div className="absolute bottom-0 inset-x-0 p-6 sm:p-7 z-10">
+          {/* Price */}
+          <div className="mb-3">
+            <span className="inline-flex items-center gap-1 text-accent-400 text-sm font-semibold tracking-wide drop-shadow-lg">
+              {formatPrice(price, priceLabel)}
+            </span>
+          </div>
+
+          {/* Title */}
+          <h3 className="font-display text-xl sm:text-2xl font-bold text-white leading-snug mb-2 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
             {title}
           </h3>
 
+          {/* Destinations */}
           {destList.length > 0 && (
-            <p className="text-sm text-gray-500 mb-3 line-clamp-1">
-              {destList.join(" · ")}
+            <p className="flex items-center gap-1.5 text-sm text-white/70 drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]">
+              <FiMapPin className="w-3.5 h-3.5 flex-shrink-0 text-white/50" />
+              {destList.slice(0, 3).join(" · ")}
+              {destList.length > 3 && ` +${destList.length - 3}`}
             </p>
           )}
 
-          <div className="flex items-center justify-between mt-4">
-            <div>
-              <span className="flex items-center gap-1 text-xs text-gray-400 mb-1">
-                <FiClock className="w-3 h-3" />
-                {duration}
-              </span>
-              <span className="text-primary-700 font-bold">
-                {formatPrice(price, priceLabel)}
-              </span>
-            </div>
-            <span className="bg-primary-100/60 p-2 rounded-full text-primary-600 group-hover:bg-primary-500 group-hover:text-white group-hover:translate-x-1 transition-all duration-300">
-              <FiArrowRight className="w-4 h-4" />
-            </span>
-          </div>
+          {/* Explore link */}
+          <span className="inline-flex items-center gap-2 text-accent-400 text-sm font-semibold mt-4 group-hover:gap-3 transition-all duration-300">
+            Explore package
+            <FiArrowUpRight className="w-4 h-4" />
+          </span>
         </div>
       </Link>
     </motion.div>

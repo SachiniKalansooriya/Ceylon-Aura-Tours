@@ -16,6 +16,7 @@ interface PackageFormProps {
     price: number | null;
     priceLabel: string | null;
     image: string | null;
+    images: string | null;
     destinations: string;
     itinerary: string | null;
     inclusions: string | null;
@@ -41,6 +42,7 @@ export default function PackageForm({ initialData }: PackageFormProps) {
     price: initialData?.price ?? "",
     priceLabel: initialData?.priceLabel || "per person",
     image: initialData?.image || "",
+    images: initialData?.images || "[]",
     destinations: initialData?.destinations || "[]",
     itinerary: initialData?.itinerary || "[]",
     inclusions: initialData?.inclusions || "[]",
@@ -73,6 +75,14 @@ export default function PackageForm({ initialData }: PackageFormProps) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [galleryFiles, setGalleryFiles] = useState<File[]>([]);
+  const [existingGallery, setExistingGallery] = useState<string[]>(() => {
+    try {
+      return initialData?.images ? JSON.parse(initialData.images) : [];
+    } catch {
+      return [];
+    }
+  });
 
   function safeParseJoin(str?: string | null): string {
     try {
@@ -129,11 +139,22 @@ export default function PackageForm({ initialData }: PackageFormProps) {
         if (uploadData.path) imagePath = uploadData.path;
       }
 
+      // Upload gallery images
+      const uploadedGalleryPaths: string[] = [...existingGallery];
+      for (const file of galleryFiles) {
+        const gFormData = new FormData();
+        gFormData.append("file", file);
+        const gRes = await fetch("/api/upload", { method: "POST", body: gFormData });
+        const gData = await gRes.json();
+        if (gData.path) uploadedGalleryPaths.push(gData.path);
+      }
+
       const body = {
         ...form,
         slug: form.slug || slugify(form.title, { lower: true, strict: true }),
         price: form.price === "" ? null : Number(form.price),
         image: imagePath,
+        images: JSON.stringify(uploadedGalleryPaths),
         highlights: textToJsonArray(highlightsText),
         destinations: textToJsonArray(destinationsText),
         inclusions: textToJsonArray(inclusionsText),
@@ -209,7 +230,7 @@ export default function PackageForm({ initialData }: PackageFormProps) {
       </div>
 
       {/* Duration */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Duration Label *
@@ -239,7 +260,7 @@ export default function PackageForm({ initialData }: PackageFormProps) {
       </div>
 
       {/* Price */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Price (USD) — leave blank for &quot;Contact for price&quot;
@@ -282,6 +303,50 @@ export default function PackageForm({ initialData }: PackageFormProps) {
           onChange={(e) => setImageFile(e.target.files?.[0] || null)}
           className="glass-input w-full text-sm"
         />
+      </div>
+
+      {/* Gallery Images */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Gallery Images (shown in the image slider)
+        </label>
+        {existingGallery.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-3">
+            {existingGallery.map((img, i) => (
+              <div key={i} className="relative group">
+                <div className="w-20 h-20 rounded-lg overflow-hidden border border-gray-200 bg-gray-50">
+                  <img src={img} alt={`Gallery ${i + 1}`} className="w-full h-full object-cover" />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setExistingGallery((prev) => prev.filter((_, idx) => idx !== i))}
+                  className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-500 text-white text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                  title="Remove"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+        {galleryFiles.length > 0 && (
+          <p className="text-xs text-primary-600 mb-2">
+            + {galleryFiles.length} new image{galleryFiles.length > 1 ? "s" : ""} to upload
+          </p>
+        )}
+        <input
+          type="file"
+          accept="image/*"
+          multiple
+          onChange={(e) => {
+            const files = Array.from(e.target.files || []);
+            setGalleryFiles((prev) => [...prev, ...files]);
+          }}
+          className="glass-input w-full text-sm"
+        />
+        <p className="text-xs text-gray-400 mt-1">
+          Select multiple images. These appear in the gallery slider on the package detail page.
+        </p>
       </div>
 
       {/* Description */}
@@ -341,7 +406,7 @@ export default function PackageForm({ initialData }: PackageFormProps) {
       </div>
 
       {/* Inclusions / Exclusions */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Included (comma-separated)

@@ -1,12 +1,12 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import { FaWhatsapp } from "react-icons/fa";
 import { FiClock, FiCheck, FiX, FiArrowLeft } from "react-icons/fi";
 import { prisma } from "@/lib/prisma";
 import { parseJSON, formatPrice } from "@/lib/helpers";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
+import PackageGallery from "@/components/PackageGallery";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -47,15 +47,22 @@ export default async function PackageDetailPage({ params }: Props) {
   const inclusions = parseJSON<string[]>(pkg.inclusions, []);
   const exclusions = parseJSON<string[]>(pkg.exclusions, []);
 
+  // Build gallery images: combine main image + extra images
+  const extraImages = parseJSON<string[]>(pkg.images, []);
+  const galleryImages = [
+    ...(pkg.image ? [pkg.image] : []),
+    ...extraImages.filter((img: string) => img !== pkg.image),
+  ];
+
   const whatsappUrl = buildWhatsAppUrl(destinations, undefined, undefined, undefined, pkg.title);
 
   return (
     <div className="bg-mesh-light min-h-screen">
-      <div className="section-padding py-8 lg:py-12">
+      <div className="section-padding pt-28 pb-12">
         {/* Breadcrumb */}
         <Link
           href="/packages"
-          className="inline-flex items-center gap-2 text-sm text-primary-600 hover:text-primary-700 mb-6 transition-colors"
+          className="inline-flex items-center gap-2 text-sm text-white bg-primary-900 px-4 py-2 rounded-full hover:bg-primary-950 transition-all duration-300 mb-6"
         >
           <FiArrowLeft className="w-4 h-4" />
           All Tour Packages
@@ -64,17 +71,9 @@ export default async function PackageDetailPage({ params }: Props) {
         <div className="grid lg:grid-cols-3 gap-10">
           {/* Main Content */}
           <div className="lg:col-span-2">
-            {/* Image */}
-            {pkg.image && (
-              <div className="relative h-64 sm:h-80 lg:h-96 rounded-2xl overflow-hidden mb-8 shadow-xl">
-                <Image
-                  src={pkg.image}
-                  alt={pkg.title}
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </div>
+            {/* Image Gallery */}
+            {galleryImages.length > 0 && (
+              <PackageGallery images={galleryImages} title={pkg.title} />
             )}
 
             <h1 className="font-display text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
@@ -86,7 +85,7 @@ export default async function PackageDetailPage({ params }: Props) {
                 <FiClock className="w-4 h-4" />
                 {pkg.duration}
               </span>
-              <span className="text-primary-700 font-bold text-lg">
+              <span className="text-accent-500 font-bold text-lg">
                 {formatPrice(pkg.price, pkg.priceLabel)}
               </span>
             </div>
@@ -97,7 +96,7 @@ export default async function PackageDetailPage({ params }: Props) {
                 {destinations.map((d) => (
                   <span
                     key={d}
-                    className="bg-primary-500/10 text-primary-700 text-sm px-3 py-1 rounded-full border border-primary-400/20"
+                    className="bg-primary-900/10 text-primary-900 text-sm px-3 py-1 rounded-full border border-primary-900/20"
                   >
                     {d}
                   </span>
@@ -120,7 +119,7 @@ export default async function PackageDetailPage({ params }: Props) {
                 <ul className="grid sm:grid-cols-2 gap-3">
                   {highlights.map((h, i) => (
                     <li key={i} className="flex items-start gap-2 text-gray-600">
-                      <FiCheck className="w-5 h-5 text-primary-500 mt-0.5 flex-shrink-0" />
+                      <FiCheck className="w-5 h-5 text-accent-500 mt-0.5 flex-shrink-0" />
                       {h}
                     </li>
                   ))}
@@ -141,7 +140,7 @@ export default async function PackageDetailPage({ params }: Props) {
                       className="glass-card p-5"
                     >
                       <div className="flex items-center gap-3 mb-2">
-                        <span className="bg-gradient-to-r from-primary-500 to-primary-600 text-white text-xs font-bold w-8 h-8 rounded-full flex items-center justify-center shadow-md shadow-primary-500/25">
+                        <span className="bg-gradient-to-r from-primary-900 to-primary-950 text-white text-xs font-bold w-8 h-8 rounded-full flex items-center justify-center shadow-md shadow-primary-900/25">
                           {day.day}
                         </span>
                         <h3 className="font-semibold text-gray-900">
@@ -202,10 +201,10 @@ export default async function PackageDetailPage({ params }: Props) {
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full btn-whatsapp justify-center"
+                className="w-full inline-flex items-center justify-center gap-3 bg-[#BCD5AC] text-black px-6 py-3.5 rounded-full font-bold text-base hover:bg-[#1fb855] transition-all duration-300 shadow-lg shadow-[#25D366]/20 hover:-translate-y-0.5"
               >
                 <FaWhatsapp className="w-5 h-5" />
-                Inquire on WhatsApp
+                Ask About This Tour
               </a>
               <p className="text-xs text-gray-400 text-center mt-3">
                 We typically reply within a few hours

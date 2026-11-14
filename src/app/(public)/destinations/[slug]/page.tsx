@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { FaWhatsapp } from "react-icons/fa";
-import { FiArrowLeft, FiCheck } from "react-icons/fi";
+import { FiArrowLeft, FiCheck, FiArrowUpRight } from "react-icons/fi";
 import { prisma } from "@/lib/prisma";
 import { parseJSON } from "@/lib/helpers";
 
@@ -51,19 +51,12 @@ export default async function DestinationDetailPage({ params }: Props) {
   });
 
   return (
-    <div className="bg-mesh-light min-h-screen">
-      <div className="section-padding py-8 lg:py-12">
-        <Link
-          href="/destinations"
-          className="inline-flex items-center gap-2 text-sm text-primary-600 hover:text-primary-700 mb-6 transition-colors"
-        >
-          <FiArrowLeft className="w-4 h-4" />
-          All Destinations
-        </Link>
-
-        {/* Hero Image */}
-        {dest.image && (
-          <div className="relative h-64 sm:h-80 lg:h-[28rem] rounded-2xl overflow-hidden mb-8 shadow-xl">
+    <div className="min-h-screen bg-[#faf9f7]">
+      {/* ───── Hero Section ───── */}
+      <section className="relative h-[50vh] sm:h-[55vh] lg:h-[60vh] overflow-hidden">
+        {/* Background image from admin */}
+        <div className="absolute inset-0 bg-primary-950">
+          {dest.image ? (
             <Image
               src={dest.image}
               alt={dest.name}
@@ -71,41 +64,72 @@ export default async function DestinationDetailPage({ params }: Props) {
               className="object-cover"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-            <div className="absolute bottom-6 left-6">
-              <span className="inline-block bg-white/20 backdrop-blur-md border border-white/30 text-sm text-white font-medium uppercase tracking-wider px-3 py-1 rounded-full mb-2">
-                {dest.category}
-              </span>
-              <h1 className="font-display text-4xl lg:text-5xl font-bold text-white mt-1">
-                {dest.name}
-              </h1>
-            </div>
-          </div>
-        )}
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-primary-900 to-primary-950" />
+          )}
+        </div>
 
-        {!dest.image && (
-          <h1 className="font-display text-4xl font-bold text-gray-900 mb-6">
+        {/* Dark overlay */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(to top, rgba(10,22,40,0.9) 0%, rgba(15,30,55,0.6) 40%, rgba(20,40,70,0.3) 70%, rgba(30,58,95,0.2) 100%)",
+          }}
+        />
+
+    {/* Back button */}
+<div className="absolute top-24 left-0 right-0 section-padding z-10">
+  <Link
+    href="/destinations"
+    className="inline-flex items-center gap-2 text-sm text-white bg-black/15 backdrop-blur-md border border-white/20 px-4 py-2 rounded-full hover:bg-white/25 transition-all duration-300"
+  >
+    <FiArrowLeft className="w-4 h-4" />
+    All Destinations
+  </Link>
+</div>
+
+        {/* Hero content */}
+        <div className="absolute bottom-0 inset-x-0 section-padding pb-10 z-10">
+          <span className="inline-block bg-white/15 backdrop-blur-md border border-white/20 text-sm text-white font-medium uppercase tracking-wider px-4 py-1.5 rounded-full mb-4">
+            {dest.category}
+          </span>
+          <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]">
             {dest.name}
           </h1>
-        )}
+        </div>
 
+        {/* Bottom fade to page bg */}
+        <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-[#faf9f7] to-transparent" />
+      </section>
+
+      {/* ───── Content ───── */}
+      <div className="section-padding py-10 lg:py-14">
         <div className="grid lg:grid-cols-3 gap-10">
+          {/* Main content */}
           <div className="lg:col-span-2">
-            <div className="glass-card p-6">
+            {/* Description */}
+            <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100">
+              <h2 className="font-display text-xl font-bold text-gray-900 mb-4">
+                About {dest.name}
+              </h2>
               <p className="text-gray-600 leading-relaxed text-lg whitespace-pre-line">
                 {dest.description}
               </p>
             </div>
 
+            {/* Highlights */}
             {highlights.length > 0 && (
-              <div className="mt-10">
-                <h2 className="font-display text-xl font-bold text-gray-900 mb-4">
+              <div className="mt-8 bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100">
+                <h2 className="font-display text-xl font-bold text-gray-900 mb-5">
                   Highlights
                 </h2>
                 <ul className="grid sm:grid-cols-2 gap-3">
                   {highlights.map((h, i) => (
-                    <li key={i} className="flex items-start gap-2 text-gray-600">
-                      <FiCheck className="w-5 h-5 text-primary-500 mt-0.5 flex-shrink-0" />
+                    <li key={i} className="flex items-start gap-3 text-gray-600">
+                      <span className="w-5 h-5 rounded-full bg-accent-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <FiCheck className="w-3 h-3 text-accent-500" />
+                      </span>
                       {h}
                     </li>
                   ))}
@@ -115,8 +139,8 @@ export default async function DestinationDetailPage({ params }: Props) {
 
             {/* Related Packages */}
             {relatedPackages.length > 0 && (
-              <div className="mt-12">
-                <h2 className="font-display text-xl font-bold text-gray-900 mb-4">
+              <div className="mt-8">
+                <h2 className="font-display text-xl font-bold text-gray-900 mb-5">
                   Tours That Visit {dest.name}
                 </h2>
                 <div className="space-y-3">
@@ -124,17 +148,24 @@ export default async function DestinationDetailPage({ params }: Props) {
                     <Link
                       key={pkg.id}
                       href={`/packages/${pkg.slug}`}
-                      className="block glass-card p-4 hover:bg-primary-50/50 transition-colors"
+                      className="group block bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:border-primary-900/20 hover:shadow-md transition-all duration-300"
                     >
-                      <h3 className="font-semibold text-gray-900">
-                        {pkg.title}
-                      </h3>
-                      <p className="text-sm text-gray-500 mt-1">
-                        {pkg.duration} &bull;{" "}
-                        {pkg.price
-                          ? `From US$ ${pkg.price}`
-                          : "Contact for price"}
-                      </p>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="font-display font-bold text-gray-900 group-hover:text-primary-900 transition-colors">
+                            {pkg.title}
+                          </h3>
+                          <p className="text-sm text-gray-500 mt-1">
+                            {pkg.duration} &bull;{" "}
+                            {pkg.price
+                              ? `From US$ ${pkg.price}`
+                              : "Contact for price"}
+                          </p>
+                        </div>
+                        <span className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 group-hover:bg-primary-900 group-hover:text-white transition-all duration-300 flex-shrink-0">
+                          <FiArrowUpRight className="w-4 h-4" />
+                        </span>
+                      </div>
                     </Link>
                   ))}
                 </div>
@@ -142,31 +173,44 @@ export default async function DestinationDetailPage({ params }: Props) {
             )}
           </div>
 
-          {/* Sidebar */}
+          {/* ───── Sidebar ───── */}
           <div>
-            <div className="sticky top-24 glass-card p-6">
-              <h3 className="font-display text-lg font-bold text-gray-900 mb-2">
-                Want to visit {dest.name}?
-              </h3>
-              <p className="text-sm text-gray-500 mb-6">
-                We&apos;ll build a custom tour that includes {dest.name} along
-                with your other dream destinations.
-              </p>
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full btn-whatsapp justify-center"
-              >
-                <FaWhatsapp className="w-5 h-5" />
-                Plan This Trip
-              </a>
-              <Link
-                href="/plan"
-                className="w-full btn-outline justify-center mt-3 text-sm"
-              >
-                Pick Multiple Destinations
-              </Link>
+            <div className="sticky top-24 space-y-4">
+              {/* WhatsApp CTA card */}
+              <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                <h3 className="font-display text-lg font-bold text-gray-900 mb-2">
+                  Want to visit {dest.name}?
+                </h3>
+                <p className="text-sm text-gray-500 mb-6 leading-relaxed">
+                  We&apos;ll build a custom tour that includes {dest.name} along
+                  with your other dream destinations. Free quote, no obligation.
+                </p>
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full inline-flex items-center justify-center gap-3 bg-[#25D366] text-white px-6 py-3.5 rounded-full font-bold text-base hover:bg-[#1fb855] transition-all duration-300 shadow-lg shadow-[#25D366]/20 hover:-translate-y-0.5"
+                >
+                  <FaWhatsapp className="w-5 h-5" />
+                  Ask About {dest.name}
+                </a>
+                <Link
+                  href="/plan"
+                  className="w-full inline-flex items-center justify-center gap-2 border-2 border-primary-900 text-primary-900 px-6 py-3 rounded-full font-semibold text-sm hover:bg-primary-900 hover:text-white transition-all duration-300 mt-3"
+                >
+                  Pick Multiple Destinations
+                </Link>
+              </div>
+
+              {/* Quick info card */}
+              <div className="bg-primary-950 rounded-2xl p-6 text-center">
+                <p className="text-accent-400 font-display font-bold text-lg mb-1">
+                  24/7 Support
+                </p>
+                <p className="text-white/50 text-sm">
+                  Reach us anytime on WhatsApp
+                </p>
+              </div>
             </div>
           </div>
         </div>

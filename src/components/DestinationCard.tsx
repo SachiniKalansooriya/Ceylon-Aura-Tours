@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { FiArrowUpRight } from "react-icons/fi";
 import { motion } from "framer-motion";
 
 interface DestinationCardProps {
@@ -31,41 +32,54 @@ export default function DestinationCard({
         delay: index * 0.1,
         ease: [0.25, 0.4, 0.25, 1],
       }}
-      whileHover={{ y: -6, transition: { duration: 0.25 } }}
+      whileHover={{ y: -4, transition: { duration: 0.25 } }}
     >
-      <Link href={`/destinations/${slug}`} className="group block rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
-        <div className="relative h-56 bg-gray-200/50 overflow-hidden">
-          {image ? (
-            <Image
-              src={image}
-              alt={name}
-              fill
-              className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-gray-400 text-4xl bg-gradient-to-br from-primary-100/50 to-coral-100/50">
-              📍
-            </div>
-          )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-          <div className="absolute bottom-0 left-0 right-0 p-4">
-            <motion.span
-              className="inline-block bg-white/20 backdrop-blur-md border border-white/30 text-xs font-medium text-white uppercase tracking-wider px-3 py-1 rounded-full mb-2"
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 + index * 0.1, duration: 0.4 }}
-            >
-              {category}
-            </motion.span>
-            <h3 className="font-display text-xl font-bold text-white group-hover:translate-x-1 transition-transform duration-300">
-              {name}
-            </h3>
-            {shortDesc && (
-              <p className="text-sm text-gray-200 mt-1 line-clamp-1">{shortDesc}</p>
-            )}
+      <Link
+        href={`/destinations/${slug}`}
+        className="group block relative rounded-3xl overflow-hidden aspect-[4/5] bg-gray-100"
+      >
+        {/* Full-bleed image */}
+        {image ? (
+          <Image
+            src={image}
+            alt={name}
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-gray-400 text-4xl bg-gradient-to-br from-primary-900/10 to-accent-100/30">
+            📍
           </div>
+        )}
+
+        {/* Overlay gradient */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+
+        {/* Category pill */}
+        <div className="absolute top-4 left-4">
+          <span className="inline-block bg-white/90 backdrop-blur-md text-gray-800 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
+            {category}
+          </span>
+        </div>
+
+        {/* Arrow — hover reveal */}
+        <div className="absolute top-4 right-4">
+          <span className="w-9 h-9 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+            <FiArrowUpRight className="w-4 h-4" />
+          </span>
+        </div>
+
+        {/* Bottom text */}
+        <div className="absolute bottom-0 inset-x-0 p-5">
+          <h3 className="font-display text-xl font-700 text-white leading-snug mb-1">
+            {name}
+          </h3>
+          {shortDesc && (
+            <p className="text-sm text-gray-300 line-clamp-2 leading-relaxed">
+              {shortDesc}
+            </p>
+          )}
         </div>
       </Link>
     </motion.div>

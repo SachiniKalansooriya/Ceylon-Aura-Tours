@@ -2,36 +2,35 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { FiMessageCircle } from "react-icons/fi";
+import { FaWhatsapp } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 
-const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "Ceylon Paradise Tours";
+const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "Ceylon Aura Travels";
 
 const navLinks = [
   { href: "/", label: "Home" },
-  { href: "/packages", label: "Tour Packages" },
+  { href: "/packages", label: "Packages" },
   { href: "/destinations", label: "Destinations" },
-  { href: "/plan", label: "Plan Your Trip" },
+  { href: "/plan", label: "Plan Trip" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
 
-/* Animated hamburger → X icon */
 function HamburgerIcon({ open }: { open: boolean }) {
   return (
     <div className="w-6 h-5 relative flex flex-col justify-between">
       <motion.span
-        className="block h-0.5 w-6 bg-gray-600 rounded-full origin-left"
+        className="block h-0.5 w-6 bg-current rounded-full origin-left"
         animate={open ? { rotate: 45, x: 2, y: -1 } : { rotate: 0, x: 0, y: 0 }}
         transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
       />
       <motion.span
-        className="block h-0.5 w-6 bg-gray-600 rounded-full"
+        className="block h-0.5 w-6 bg-current rounded-full"
         animate={open ? { opacity: 0, x: -10 } : { opacity: 1, x: 0 }}
         transition={{ duration: 0.2 }}
       />
       <motion.span
-        className="block h-0.5 w-6 bg-gray-600 rounded-full origin-left"
+        className="block h-0.5 w-6 bg-current rounded-full origin-left"
         animate={open ? { rotate: -45, x: 2, y: 1 } : { rotate: 0, x: 0, y: 0 }}
         transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
       />
@@ -39,7 +38,6 @@ function HamburgerIcon({ open }: { open: boolean }) {
   );
 }
 
-/* Menu item animation variants */
 const menuItemVariants = {
   closed: { opacity: 0, x: -20, y: 0 },
   open: (i: number) => ({
@@ -67,17 +65,21 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
 
-  /* Add shadow on scroll */
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
+    const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Transparent on top, solid white when scrolled — same on every page
+  const showSolid = scrolled;
+
   return (
     <motion.header
-      className={`glass sticky top-0 z-50 border-b border-white/20 transition-shadow duration-300 ${
-        scrolled ? "shadow-lg shadow-black/5" : ""
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        showSolid
+          ? "bg-white/95 backdrop-blur-2xl shadow-lg shadow-black/[.04] border-b border-gray-100"
+          : "bg-black/40 backdrop-blur-sm"
       }`}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
@@ -86,48 +88,64 @@ export default function Navbar() {
       <nav className="section-padding">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <motion.span
-              className="text-2xl"
-              whileHover={{ rotate: [0, -10, 10, -5, 0], scale: 1.2 }}
-              transition={{ duration: 0.5 }}
-            >
-              🌴
-            </motion.span>
-            <span className="font-display text-xl lg:text-2xl font-bold text-gradient-dark">
-              {siteName}
-            </span>
+          <Link href="/" className="flex items-center gap-3 group">
+            {/* Compass icon mark */}
+            <div className={`w-10 h-10 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+              showSolid ? "border-primary-900 bg-primary-900" : "border-accent-400 bg-white/10 backdrop-blur-sm"
+            }`}>
+              <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none">
+                <circle cx="12" cy="12" r="9" stroke={showSolid ? "#d4a84b" : "#d4a84b"} strokeWidth="1.2"/>
+                <polygon points="12,5 10.5,11 12,10 13.5,11" fill={showSolid ? "#ffffff" : "#d4a84b"}/>
+                <polygon points="12,19 10.5,13 12,14 13.5,13" fill={showSolid ? "#ffffff" : "#ffffff"} opacity="0.4"/>
+              </svg>
+            </div>
+            <div>
+              <span className={`font-display text-lg font-700 tracking-tight transition-colors duration-300 ${
+                showSolid ? "text-primary-950" : "text-white"
+              }`}>
+                Ceylon <span className={`transition-colors duration-300 ${showSolid ? "text-accent-500" : "text-accent-400"}`}>Aura</span>
+              </span>
+              <span className={`block text-[9px] font-bold uppercase tracking-[0.25em] -mt-0.5 transition-colors duration-300 ${
+                showSolid ? "text-gray-400" : "text-white/50"
+              }`}>
+                Travels
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Nav */}
-          <div className="hidden lg:flex items-center gap-8">
+          <div className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="relative text-gray-600 hover:text-primary-600 font-medium transition-colors text-sm group"
+                className={`font-medium text-sm px-4 py-2 rounded-full transition-all duration-300 ${
+                  showSolid
+                    ? "text-gray-600 hover:text-primary-900 hover:bg-primary-50"
+                    : "text-white/80 hover:text-white hover:bg-white/10"
+                }`}
               >
                 {link.label}
-                {/* Animated underline */}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-primary-500 to-primary-600 rounded-full transition-all duration-300 group-hover:w-full" />
               </Link>
             ))}
             <motion.a
               href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent("Hi! I'd like to plan a tour.")}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-whatsapp text-sm py-2 px-4"
+              className="ml-3 inline-flex items-center gap-2 bg-[#BCD5AC] text-black text-sm font-semibold px-5 py-2.5 rounded-full hover:bg-green-600 transition-colors shadow-sm"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <FiMessageCircle className="w-4 h-4" />
-              Plan on WhatsApp
+              <FaWhatsapp className="w-4 h-4" />
+              WhatsApp
             </motion.a>
           </div>
 
-          {/* Mobile Toggle — Animated Hamburger */}
+          {/* Mobile Toggle */}
           <motion.button
-            className="lg:hidden p-2 text-gray-600 hover:text-primary-600 transition-colors"
+            className={`lg:hidden p-2 transition-colors ${
+              showSolid ? "text-gray-700" : "text-white"
+            }`}
             onClick={() => setOpen(!open)}
             aria-label="Toggle menu"
             whileTap={{ scale: 0.9 }}
@@ -136,17 +154,17 @@ export default function Navbar() {
           </motion.button>
         </div>
 
-        {/* Mobile Nav — Animated */}
+        {/* Mobile Nav */}
         <AnimatePresence>
           {open && (
             <motion.div
-              className="lg:hidden overflow-hidden border-t border-white/20 mt-2 bg-white/40 backdrop-blur-lg rounded-b-2xl -mx-4 px-4"
+              className="lg:hidden overflow-hidden bg-white/95 backdrop-blur-xl rounded-3xl mt-2 -mx-2 border border-gray-100 shadow-xl"
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.35, ease: [0.25, 0.4, 0.25, 1] }}
             >
-              <div className="py-4">
+              <div className="p-4">
                 {navLinks.map((link, i) => (
                   <motion.div
                     key={link.href}
@@ -158,7 +176,7 @@ export default function Navbar() {
                   >
                     <Link
                       href={link.href}
-                      className="block py-3 px-3 text-gray-600 hover:text-primary-600 hover:bg-primary-50/50 font-medium rounded-xl transition-colors"
+                      className="block py-3 px-4 text-gray-700 hover:text-primary-900 hover:bg-primary-50 font-medium rounded-2xl transition-colors"
                       onClick={() => setOpen(false)}
                     >
                       {link.label}
@@ -176,10 +194,10 @@ export default function Navbar() {
                     href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent("Hi! I'd like to plan a tour.")}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-whatsapp text-sm mt-3 w-full justify-center"
+                    className="flex items-center justify-center gap-2 bg-green-500 text-white text-sm font-semibold w-full py-3 rounded-2xl mt-3 hover:bg-green-600 transition-colors"
                   >
-                    <FiMessageCircle className="w-4 h-4" />
-                    Plan on WhatsApp
+                    <FaWhatsapp className="w-4 h-4" />
+                    Chat on WhatsApp
                   </a>
                 </motion.div>
               </div>

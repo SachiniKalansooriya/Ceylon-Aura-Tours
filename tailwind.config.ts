@@ -9,31 +9,34 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Navy blue primary
         primary: {
-          50: "#f0fdfa",
-          100: "#ccfbf1",
-          200: "#99f6e4",
-          300: "#5eead4",
-          400: "#2dd4bf",
-          500: "#14b8a6",
-          600: "#0d9488",
-          700: "#0f766e",
-          800: "#115e59",
-          900: "#134e4a",
-          950: "#042f2e",
+          50: "#f0f4ff",
+          100: "#dbe4ff",
+          200: "#bac8ff",
+          300: "#91a7ff",
+          400: "#748ffc",
+          500: "#5c7cfa",
+          600: "#4263eb",
+          700: "#3b5bdb",
+          800: "#364fc7",
+          900: "#1e3a5f",
+          950: "#0f1d30",
         },
+        // Warm beige accent
         accent: {
-          50: "#fff7ed",
-          100: "#ffedd5",
-          200: "#fed7aa",
-          300: "#fdba74",
-          400: "#fb923c",
-          500: "#f97316",
-          600: "#ea580c",
-          700: "#c2410c",
-          800: "#9a3412",
-          900: "#7c2d12",
+          50: "#fefcf6",
+          100: "#fdf6e3",
+          200: "#faecc7",
+          300: "#f5dda0",
+          400: "#e8c872",
+          500: "#d4a84b",
+          600: "#b8892e",
+          700: "#9a6f24",
+          800: "#7d5a1e",
+          900: "#5c4216",
         },
+        // Keep coral for WhatsApp/CTA accents
         coral: {
           50: "#fff1f2",
           100: "#ffe4e6",
@@ -48,15 +51,22 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"],
-        display: ["Playfair Display", "Georgia", "serif"],
+        sans: ["DM Sans", "system-ui", "sans-serif"],
+        display: ["Sora", "sans-serif"],
+      },
+      fontWeight: {
+        700: "700",
+        800: "800",
       },
       backdropBlur: {
         xs: "2px",
       },
+      borderRadius: {
+        "4xl": "2rem",
+      },
       animation: {
-        "float": "float 6s ease-in-out infinite",
-        "glow": "glow 2s ease-in-out infinite alternate",
+        float: "float 6s ease-in-out infinite",
+        glow: "glow 2s ease-in-out infinite alternate",
       },
       keyframes: {
         float: {
@@ -64,8 +74,8 @@ const config: Config = {
           "50%": { transform: "translateY(-10px)" },
         },
         glow: {
-          "0%": { boxShadow: "0 0 20px rgba(20, 184, 166, 0.3)" },
-          "100%": { boxShadow: "0 0 30px rgba(20, 184, 166, 0.6)" },
+          "0%": { boxShadow: "0 0 20px rgba(30, 58, 95, 0.3)" },
+          "100%": { boxShadow: "0 0 30px rgba(30, 58, 95, 0.6)" },
         },
       },
     },
