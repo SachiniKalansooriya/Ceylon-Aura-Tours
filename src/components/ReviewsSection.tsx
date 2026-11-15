@@ -11,49 +11,6 @@ interface Review {
   rating: number;
 }
 
-const initialReviews: Review[] = [
-  {
-    id: 1,
-    name: "Sarah Mitchell",
-    country: "Australia",
-    comment:
-      "The culture, the food, the people — everything was warm and unforgettable. Already planning my next trip back.",
-    rating: 5,
-  },
-  {
-    id: 2,
-    name: "Daniel Weber",
-    country: "Germany",
-    comment:
-      "From the misty tea hills of Ella to the ancient ruins of Polonnaruwa — every day felt like stepping into a painting.",
-    rating: 5,
-  },
-  {
-    id: 3,
-    name: "Emily Chen",
-    country: "Canada",
-    comment:
-      "Our guide was incredibly knowledgeable. Sigiriya at sunrise was a dream come true. Highly recommend Ceylon Aura!",
-    rating: 5,
-  },
-  {
-    id: 4,
-    name: "James Okoro",
-    country: "United Kingdom",
-    comment:
-      "Best wildlife safari I've ever experienced. Saw leopards in Yala and wild elephants in Udawalawe — truly magical.",
-    rating: 5,
-  },
-  {
-    id: 5,
-    name: "Maria Santos",
-    country: "Brazil",
-    comment:
-      "The beaches in the south coast are paradise. Mirissa whale watching was the highlight of our honeymoon trip.",
-    rating: 4,
-  },
-];
-
 function StarRating({
   rating,
   onRate,
@@ -92,7 +49,7 @@ function StarRating({
 export default function ReviewsSection() {
   const [current, setCurrent] = useState(0);
   const [showModal, setShowModal] = useState(false);
-  const [reviews, setReviews] = useState<Review[]>(initialReviews);
+  const [reviews, setReviews] = useState<Review[]>([]);
   const [formData, setFormData] = useState({
     name: "",
     country: "",
@@ -106,7 +63,7 @@ export default function ReviewsSection() {
     fetch("/api/reviews")
       .then((res) => res.json())
       .then((data: Review[]) => {
-        if (Array.isArray(data) && data.length > 0) setReviews(data);
+        if (Array.isArray(data)) setReviews(data);
       })
       .catch(() => {});
   }, []);
@@ -147,7 +104,7 @@ export default function ReviewsSection() {
     }
   };
 
-  const review = reviews[current];
+  const review = reviews[current] as Review | undefined;
 
   return (
     <>
@@ -179,63 +136,71 @@ export default function ReviewsSection() {
             </p>
           </div>
 
-          {/* Single review with arrows */}
-          <div className="relative max-w-2xl mx-auto flex items-center gap-4 sm:gap-8">
-            {/* Left arrow */}
-            <button
-              onClick={prev}
-              className="flex-shrink-0 w-11 h-11 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white transition-all duration-300 hover:bg-accent-500 hover:border-accent-500"
-              aria-label="Previous review"
-            >
-              <FiChevronLeft className="w-5 h-5" />
-            </button>
+          {review ? (
+            <>
+              {/* Single review with arrows */}
+              <div className="relative max-w-2xl mx-auto flex items-center gap-4 sm:gap-8">
+                {/* Left arrow */}
+                <button
+                  onClick={prev}
+                  className="flex-shrink-0 w-11 h-11 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white transition-all duration-300 hover:bg-accent-500 hover:border-accent-500"
+                  aria-label="Previous review"
+                >
+                  <FiChevronLeft className="w-5 h-5" />
+                </button>
 
-            {/* Review card */}
-            <div
-              className={`flex-1 rounded-2xl p-8 sm:p-10 bg-white/5 backdrop-blur-xl border border-white/10 text-center transition-all duration-300 ${
-                fade ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
-              }`}
-            >
-              {/* Quote mark */}
-              <div className="text-accent-400/30 text-5xl font-serif leading-none mb-2">
-                &ldquo;
+                {/* Review card */}
+                <div
+                  className={`flex-1 rounded-2xl p-8 sm:p-10 bg-white/5 backdrop-blur-xl border border-white/10 text-center transition-all duration-300 ${
+                    fade ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+                  }`}
+                >
+                  {/* Quote mark */}
+                  <div className="text-accent-400/30 text-5xl font-serif leading-none mb-2">
+                    &ldquo;
+                  </div>
+
+                  {/* Comment */}
+                  <p className="text-white/80 text-lg leading-relaxed mb-6">
+                    {review.comment}
+                  </p>
+
+                  {/* Author */}
+                  <p className="text-white font-bold text-base">{review.name}</p>
+                  <p className="text-white/40 text-sm">{review.country}</p>
+                </div>
+
+                {/* Right arrow */}
+                <button
+                  onClick={next}
+                  className="flex-shrink-0 w-11 h-11 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white transition-all duration-300 hover:bg-accent-500 hover:border-accent-500"
+                  aria-label="Next review"
+                >
+                  <FiChevronRight className="w-5 h-5" />
+                </button>
               </div>
 
-              {/* Comment */}
-              <p className="text-white/80 text-lg leading-relaxed mb-6">
-                {review.comment}
-              </p>
-
-              {/* Author */}
-              <p className="text-white font-bold text-base">{review.name}</p>
-              <p className="text-white/40 text-sm">{review.country}</p>
-            </div>
-
-            {/* Right arrow */}
-            <button
-              onClick={next}
-              className="flex-shrink-0 w-11 h-11 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white transition-all duration-300 hover:bg-accent-500 hover:border-accent-500"
-              aria-label="Next review"
-            >
-              <FiChevronRight className="w-5 h-5" />
-            </button>
-          </div>
-
-          {/* Dot indicators */}
-          <div className="flex items-center justify-center gap-2 mt-8">
-            {reviews.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => goTo(i)}
-                className={`transition-all duration-300 rounded-full ${
-                  i === current
-                    ? "w-8 h-2.5 bg-accent-400"
-                    : "w-2.5 h-2.5 bg-white/30 hover:bg-white/50"
-                }`}
-                aria-label={`Go to review ${i + 1}`}
-              />
-            ))}
-          </div>
+              {/* Dot indicators */}
+              <div className="flex items-center justify-center gap-2 mt-8">
+                {reviews.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => goTo(i)}
+                    className={`transition-all duration-300 rounded-full ${
+                      i === current
+                        ? "w-8 h-2.5 bg-accent-400"
+                        : "w-2.5 h-2.5 bg-white/30 hover:bg-white/50"
+                    }`}
+                    aria-label={`Go to review ${i + 1}`}
+                  />
+                ))}
+              </div>
+            </>
+          ) : (
+            <p className="text-center text-white/50 max-w-md mx-auto">
+              No reviews yet — be the first to share your experience!
+            </p>
+          )}
 
           {/* Add Review button */}
           <div className="text-center mt-10">
