@@ -74,6 +74,15 @@ model Inquiry {
   createdAt    DateTime @default(now())
 }
 
+model Review {
+  id        String   @id @default(cuid())
+  name      String
+  country   String
+  comment   String
+  rating    Int      @default(5)
+  createdAt DateTime @default(now())
+}
+
 model SiteSetting {
   id    String @id @default(cuid())
   key   String @unique

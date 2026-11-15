@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FiChevronLeft, FiChevronRight, FiX, FiStar, FiSend } from "react-icons/fi";
 
 interface Review {
-  id: number;
+  id: string | number;
   name: string;
   country: string;
   comment: string;
@@ -102,6 +102,15 @@ export default function ReviewsSection() {
   const [submitted, setSubmitted] = useState(false);
   const [fade, setFade] = useState(true);
 
+  useEffect(() => {
+    fetch("/api/reviews")
+      .then((res) => res.json())
+      .then((data: Review[]) => {
+        if (Array.isArray(data) && data.length > 0) setReviews(data);
+      })
+      .catch(() => {});
+  }, []);
+
   const goTo = (index: number) => {
     setFade(false);
     setTimeout(() => {
@@ -113,26 +122,29 @@ export default function ReviewsSection() {
   const prev = () => goTo(current === 0 ? reviews.length - 1 : current - 1);
   const next = () => goTo(current === reviews.length - 1 ? 0 : current + 1);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.country || !formData.comment) return;
 
-    const newReview: Review = {
-      id: Date.now(),
-      name: formData.name,
-      country: formData.country,
-      comment: formData.comment,
-      rating: formData.rating,
-    };
-    setReviews((prev) => [newReview, ...prev]);
-    setSubmitted(true);
+    try {
+      const res = await fetch("/api/reviews", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const newReview: Review = await res.json();
+      setReviews((prev) => [newReview, ...prev]);
+      setSubmitted(true);
 
-    setTimeout(() => {
-      setShowModal(false);
-      setSubmitted(false);
-      setFormData({ name: "", country: "", comment: "", rating: 5 });
-      setCurrent(0);
-    }, 2000);
+      setTimeout(() => {
+        setShowModal(false);
+        setSubmitted(false);
+        setFormData({ name: "", country: "", comment: "", rating: 5 });
+        setCurrent(0);
+      }, 2000);
+    } catch {
+      // ignore; form stays open so the user can retry
+    }
   };
 
   const review = reviews[current];
