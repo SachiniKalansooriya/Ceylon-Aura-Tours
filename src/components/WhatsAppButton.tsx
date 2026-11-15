@@ -2,10 +2,10 @@
 
 import { FaWhatsapp } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { buildSimpleWhatsAppUrl } from "@/lib/whatsapp";
 
 export default function WhatsAppButton() {
-  const phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
-  const url = `https://wa.me/${phone}?text=${encodeURIComponent("Hi! I'd like to plan a tour.")}`;
+  const url = buildSimpleWhatsAppUrl("Hi! I'd like to plan a tour.");
 
   return (
     <motion.a

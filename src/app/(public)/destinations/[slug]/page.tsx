@@ -6,6 +6,7 @@ import { FaWhatsapp } from "react-icons/fa";
 import { FiArrowLeft, FiCheck, FiArrowUpRight } from "react-icons/fi";
 import { prisma } from "@/lib/prisma";
 import { parseJSON } from "@/lib/helpers";
+import { buildSimpleWhatsAppUrl } from "@/lib/whatsapp";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -41,8 +42,7 @@ export default async function DestinationDetailPage({ params }: Props) {
   if (!dest) notFound();
 
   const highlights = parseJSON<string[]>(dest.highlights, []);
-  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
-  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Hi! I'd like to visit ${dest.name} in Sri Lanka. Can you help me plan?`)}`;
+  const whatsappUrl = buildSimpleWhatsAppUrl(`Hi! I'd like to visit ${dest.name} in Sri Lanka. Can you help me plan?`);
 
   // Get packages that include this destination
   const relatedPackages = await prisma.package.findMany({

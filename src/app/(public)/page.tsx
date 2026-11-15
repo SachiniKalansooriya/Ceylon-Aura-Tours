@@ -29,6 +29,7 @@ import ScrollReveal from "@/components/motion/ScrollReveal";
 import HeroVideo from "@/components/HeroVideo";
 import StoryCarousel from "@/components/StoryCarousel";
 import ReviewsSection from "@/components/ReviewsSection";
+import { buildSimpleWhatsAppUrl } from "@/lib/whatsapp";
 
 export const revalidate = 60;
 
@@ -54,7 +55,7 @@ export default async function HomePage() {
     getFeaturedDestinations(),
   ]);
 
-  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
+  const whatsappUrl = buildSimpleWhatsAppUrl("Hi! I'd like to plan a tour of Sri Lanka.");
   const siteName =
     process.env.NEXT_PUBLIC_SITE_NAME || "Ceylon Aura Travels";
 
@@ -94,7 +95,7 @@ export default async function HomePage() {
                   Explore
                 </AnimatedButton>
                 <AnimatedButton
-                  href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent("Hi! I'd like to plan a tour of Sri Lanka.")}`}
+                  href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-glass !px-8 !py-4"
@@ -304,7 +305,7 @@ export default async function HomePage() {
         personalized itinerary and clear pricing.
       </p>
       <AnimatedButton
-        href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent("Hi! I'd like to plan a tour of Sri Lanka.")}`}
+        href={whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
         className="inline-flex items-center gap-3 bg-accent-500 text-white px-10 py-4 rounded-full font-bold text-lg hover:bg-accent-600 transition-all duration-300 shadow-2xl shadow-accent-500/20 hover:-translate-y-0.5"

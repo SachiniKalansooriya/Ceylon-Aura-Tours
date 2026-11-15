@@ -9,6 +9,7 @@ import {
   FiSend,
   FiMessageCircle,
 } from "react-icons/fi";
+import { buildSimpleWhatsAppUrl } from "@/lib/whatsapp";
 
 const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "Ceylon Aura Tours";
 
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
 };
 
 export default function ContactPage() {
-  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
+  const whatsappUrl = buildSimpleWhatsAppUrl("Hi! I'd like to inquire about your tours.");
 
   return (
     <div className="min-h-screen bg-[#faf9f7]">
@@ -66,7 +67,7 @@ export default function ContactPage() {
             <div className="lg:col-span-2 space-y-4">
               {/* WhatsApp — Primary CTA */}
               <a
-                href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent("Hi! I'd like to inquire about your tours.")}`}
+                href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group block bg-primary-950 rounded-2xl p-6 hover:shadow-xl hover:shadow-green-500/15 hover:-translate-y-1 transition-all duration-300"

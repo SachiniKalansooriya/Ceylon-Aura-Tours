@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FaWhatsapp } from "react-icons/fa";
 import { FiPhone, FiMail, FiMapPin, FiArrowUpRight } from "react-icons/fi";
 import { motion } from "framer-motion";
+import { buildSimpleWhatsAppUrl } from "@/lib/whatsapp";
 
 const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "Ceylon Aura Tours";
 
@@ -24,7 +25,7 @@ const footerCol = {
 };
 
 export default function Footer() {
-  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
+  const whatsappUrl = buildSimpleWhatsAppUrl("Hi! I'd like to plan a tour of Sri Lanka.");
 
   return (
     <footer className="relative text-white">
@@ -50,7 +51,7 @@ export default function Footer() {
               </p>
             </div>
             <a
-              href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent("Hi! I'd like to plan a tour of Sri Lanka.")}`}
+              href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 bg-[#BCD5AC] text-black text-sm font-semibold px-6 py-3 rounded-full hover:bg-accent-600 transition-colors shadow-lg shadow-accent-500/15 flex-shrink-0"

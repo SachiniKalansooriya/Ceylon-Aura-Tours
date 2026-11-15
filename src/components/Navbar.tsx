@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { FaWhatsapp } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
+import { buildSimpleWhatsAppUrl } from "@/lib/whatsapp";
 
 const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "Ceylon Aura Travels";
 
@@ -63,7 +64,7 @@ const menuItemVariants = {
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
+  const whatsappUrl = buildSimpleWhatsAppUrl("Hi! I'd like to plan a tour.");
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -129,7 +130,7 @@ export default function Navbar() {
               </Link>
             ))}
             <motion.a
-              href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent("Hi! I'd like to plan a tour.")}`}
+              href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="ml-3 inline-flex items-center gap-2 bg-[#BCD5AC] text-black text-sm font-semibold px-5 py-2.5 rounded-full hover:bg-green-600 transition-colors shadow-sm"
@@ -191,7 +192,7 @@ export default function Navbar() {
                   exit="exit"
                 >
                   <a
-                    href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent("Hi! I'd like to plan a tour.")}`}
+                    href={whatsappUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center justify-center gap-2 bg-green-500 text-white text-sm font-semibold w-full py-3 rounded-2xl mt-3 hover:bg-green-600 transition-colors"

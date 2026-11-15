@@ -1,3 +1,13 @@
+function normalizePhone(raw: string): string {
+  const digits = raw.replace(/[^0-9]/g, "");
+  // Local Sri Lankan numbers start with a trunk "0" (e.g. 0771234567);
+  // WhatsApp requires the country code instead (94771234567).
+  if (digits.startsWith("0")) {
+    return `94${digits.slice(1)}`;
+  }
+  return digits;
+}
+
 export function buildWhatsAppUrl(
   destinations: string[],
   travelers?: number,
@@ -5,7 +15,7 @@ export function buildWhatsAppUrl(
   dateTo?: string,
   packageName?: string
 ): string {
-  const phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
+  const phone = normalizePhone(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "");
 
   let message = "Hi! I'm interested in planning a tour.\n\n";
 
@@ -39,6 +49,6 @@ export function buildWhatsAppUrl(
 }
 
 export function buildSimpleWhatsAppUrl(text: string): string {
-  const phone = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
+  const phone = normalizePhone(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "");
   return `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
 }
