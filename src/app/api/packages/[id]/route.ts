@@ -36,6 +36,7 @@ export async function PUT(request: NextRequest, { params }: Props) {
       price: body.price,
       priceLabel: body.priceLabel,
       image: body.image,
+      images: body.images,
       destinations: body.destinations,
       itinerary: body.itinerary,
       inclusions: body.inclusions,

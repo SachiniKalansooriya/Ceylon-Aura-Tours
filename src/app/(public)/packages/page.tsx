@@ -34,7 +34,7 @@ export default async function PackagesPage() {
             <p className="text-sm text-gray-400">Check back soon for new tours!</p>
           </div>
         ) : (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             {packages.map((pkg: any, i: number) => (
               <PackageCard
                 key={pkg.id}

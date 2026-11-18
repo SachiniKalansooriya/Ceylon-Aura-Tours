@@ -254,3 +254,8 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* iOS Safari: left-align date input text and keep it from collapsing */
+input[type="date"]::-webkit-date-and-time-value {
+  text-align: left;
+}

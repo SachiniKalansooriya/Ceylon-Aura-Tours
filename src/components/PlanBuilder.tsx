@@ -147,8 +147,8 @@ export default function PlanBuilder({ destinations }: PlanBuilderProps) {
           </div>
 
           {/* Dates */}
-          <div className="grid grid-cols-2 gap-3 mb-6">
-            <div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+            <div className="min-w-0">
               <label className="text-sm font-medium text-gray-600 mb-2 flex items-center gap-1">
                 <FiCalendar className="w-3 h-3" />
                 From
@@ -156,19 +156,22 @@ export default function PlanBuilder({ destinations }: PlanBuilderProps) {
               <input
                 type="date"
                 value={dateFrom}
+                max={dateTo || undefined}
                 onChange={(e) => setDateFrom(e.target.value)}
-                className="glass-input w-full text-sm"
+                className="glass-input block w-full min-w-0 max-w-full min-h-[48px] appearance-none text-base sm:text-sm"
               />
             </div>
-            <div>
-              <label className="text-sm font-medium text-gray-600 mb-2 block">
+            <div className="min-w-0">
+              <label className="text-sm font-medium text-gray-600 mb-2 flex items-center gap-1">
+                <FiCalendar className="w-3 h-3" />
                 To
               </label>
               <input
                 type="date"
                 value={dateTo}
+                min={dateFrom || undefined}
                 onChange={(e) => setDateTo(e.target.value)}
-                className="glass-input w-full text-sm"
+                className="glass-input block w-full min-w-0 max-w-full min-h-[48px] appearance-none text-base sm:text-sm"
               />
             </div>
           </div>

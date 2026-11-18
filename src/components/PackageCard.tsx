@@ -46,8 +46,7 @@ export default function PackageCard({
     >
       <Link
         href={`/packages/${slug}`}
-        className="group block relative rounded-3xl overflow-hidden cursor-pointer"
-        style={{ minHeight: "420px" }}
+        className="group block relative rounded-3xl overflow-hidden cursor-pointer min-h-[300px] sm:min-h-[340px]"
       >
         {/* Background image */}
         <div className="absolute inset-0 bg-primary-950">
@@ -56,7 +55,7 @@ export default function PackageCard({
             alt={title}
             fill
             className="object-cover transition-transform duration-700 group-hover:scale-110"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            sizes="(max-width: 640px) 100vw, (max-width: 1280px) 33vw, 25vw"
           />
         </div>
 
@@ -72,13 +71,13 @@ export default function PackageCard({
           </span>
 
           {/* Arrow */}
-          <span className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white/70 group-hover:bg-accent-500 group-hover:border-accent-500 group-hover:text-white transition-all duration-300">
+          <span className="w-9 h-9 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white/70 group-hover:bg-accent-500 group-hover:border-accent-500 group-hover:text-white transition-all duration-300">
             <FiArrowUpRight className="w-4 h-4" />
           </span>
         </div>
 
         {/* Bottom content */}
-        <div className="absolute bottom-0 inset-x-0 p-6 sm:p-7 z-10">
+        <div className="absolute bottom-0 inset-x-0 p-5 z-10">
           {/* Price */}
           <div className="mb-3">
             <span className="inline-flex items-center gap-1 text-accent-400 text-sm font-semibold tracking-wide drop-shadow-lg">
@@ -87,7 +86,7 @@ export default function PackageCard({
           </div>
 
           {/* Title */}
-          <h3 className="font-display text-xl sm:text-2xl font-bold text-white leading-snug mb-2 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
+          <h3 className="font-display text-lg sm:text-xl font-bold text-white leading-snug mb-2 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
             {title}
           </h3>
 
@@ -101,7 +100,7 @@ export default function PackageCard({
           )}
 
           {/* Explore link */}
-          <span className="inline-flex items-center gap-2 text-accent-400 text-sm font-semibold mt-4 group-hover:gap-3 transition-all duration-300">
+          <span className="inline-flex items-center gap-2 text-accent-400 text-sm font-semibold mt-3 group-hover:gap-3 transition-all duration-300">
             Explore package
             <FiArrowUpRight className="w-4 h-4" />
           </span>

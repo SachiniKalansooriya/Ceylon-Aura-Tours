@@ -272,7 +272,7 @@ export default async function HomePage() {
 </Link>
             </SectionReveal>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {destinations.map((dest: any, i: number) => (
                 <DestinationCard
                   key={dest.id}

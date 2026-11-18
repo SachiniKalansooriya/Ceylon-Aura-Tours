@@ -36,7 +36,7 @@ export default function DestinationCard({
     >
       <Link
         href={`/destinations/${slug}`}
-        className="group block relative rounded-3xl overflow-hidden aspect-[4/5] bg-gray-100"
+        className="group block relative rounded-3xl overflow-hidden aspect-[4/3] sm:aspect-[4/5] bg-gray-100"
       >
         {/* Full-bleed image */}
         {image ? (
@@ -45,7 +45,7 @@ export default function DestinationCard({
             alt={name}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            sizes="(max-width: 768px) 100vw, (max-width: 1280px) 33vw, 25vw"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-gray-400 text-4xl bg-gradient-to-br from-primary-900/10 to-accent-100/30">
@@ -72,7 +72,7 @@ export default function DestinationCard({
 
         {/* Bottom text */}
         <div className="absolute bottom-0 inset-x-0 p-5">
-          <h3 className="font-display text-xl font-700 text-white leading-snug mb-1">
+          <h3 className="font-display text-lg font-700 text-white leading-snug mb-1">
             {name}
           </h3>
           {shortDesc && (
