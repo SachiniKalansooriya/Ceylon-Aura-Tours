@@ -141,6 +141,31 @@ async function main() {
   `);
   console.log("  ✅ SiteSetting table created");
 
+  await client.execute(`
+    CREATE TABLE IF NOT EXISTS Review (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      country TEXT NOT NULL,
+      comment TEXT NOT NULL,
+      rating INTEGER NOT NULL DEFAULT 5,
+      createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+  console.log("  ✅ Review table created");
+
+  await client.execute(`
+    CREATE TABLE IF NOT EXISTS PasswordReset (
+      id TEXT PRIMARY KEY,
+      email TEXT NOT NULL,
+      codeHash TEXT NOT NULL,
+      attempts INTEGER NOT NULL DEFAULT 0,
+      expiresAt DATETIME NOT NULL,
+      createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+  await client.execute(`CREATE INDEX IF NOT EXISTS PasswordReset_email_idx ON PasswordReset(email)`);
+  console.log("  ✅ PasswordReset table created");
+
   // Seed admin user
   const adminEmail = process.env.ADMIN_EMAIL || "admin@ceylonauratours.com";
   const adminPassword = process.env.ADMIN_PASSWORD || "admin123";

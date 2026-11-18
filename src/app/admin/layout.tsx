@@ -8,8 +8,8 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
   const { status } = useSession();
   const pathname = usePathname();
 
-  // Login page doesn't need sidebar
-  if (pathname === "/admin") {
+  // Login and password recovery pages don't need the sidebar or a session
+  if (pathname === "/admin" || pathname === "/admin/forgot-password") {
     return <>{children}</>;
   }
 

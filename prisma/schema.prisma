@@ -97,3 +97,14 @@ model SiteSetting {
   key   String @unique
   value String
 }
+
+model PasswordReset {
+  id        String   @id @default(cuid())
+  email     String
+  codeHash  String
+  attempts  Int      @default(0)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([email])
+}
