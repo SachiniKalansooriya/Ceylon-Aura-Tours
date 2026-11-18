@@ -41,7 +41,7 @@ export default function PlanBuilder({ destinations }: PlanBuilderProps) {
   }
 
   return (
-    <div className="grid lg:grid-cols-3 gap-8">
+    <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
       {/* Destination Picker */}
       <div className="lg:col-span-2">
         <h2 className="font-display text-2xl font-bold text-gray-900 mb-2">
@@ -101,7 +101,7 @@ export default function PlanBuilder({ destinations }: PlanBuilderProps) {
 
       {/* Summary Sidebar */}
       <div className="lg:col-span-1">
-        <div className="sticky top-24 glass-card p-6">
+        <div className="lg:sticky lg:top-24 glass-card p-5 sm:p-6">
           <h3 className="font-display text-lg font-bold text-gray-900 mb-4">
             Your Trip Summary
           </h3>

@@ -91,6 +91,32 @@ async function main() {
   console.log("  ✅ Destination table created");
 
   await client.execute(`
+    CREATE TABLE IF NOT EXISTS Category (
+      id TEXT PRIMARY KEY,
+      name TEXT UNIQUE NOT NULL,
+      description TEXT,
+      image TEXT,
+      sortOrder INTEGER DEFAULT 0,
+      createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+  // Add columns if the Category table was created before they existed
+  for (const col of ["description", "image"]) {
+    try {
+      await client.execute(`ALTER TABLE Category ADD COLUMN ${col} TEXT`);
+    } catch {
+      // column already exists
+    }
+  }
+  // Backfill categories already used by existing destinations
+  await client.execute(`
+    INSERT OR IGNORE INTO Category (id, name)
+    SELECT 'cat_' || lower(hex(randomblob(10))), category
+    FROM (SELECT DISTINCT category FROM Destination WHERE category IS NOT NULL AND category <> '')
+  `);
+  console.log("  ✅ Category table created");
+
+  await client.execute(`
     CREATE TABLE IF NOT EXISTS Inquiry (
       id TEXT PRIMARY KEY,
       name TEXT,

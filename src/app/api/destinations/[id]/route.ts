@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { prisma } from "@/lib/prisma";
 import { authOptions } from "@/lib/auth";
+import { checkFeaturedLimit } from "@/lib/featured";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -20,6 +21,8 @@ export async function PUT(request: NextRequest, { params }: Props) {
 
   const { id } = await params;
   const body = await request.json();
+  const limitError = await checkFeaturedLimit("destination", body.featured, id);
+  if (limitError) return limitError;
 
   const dest = await prisma.destination.update({
     where: { id },
@@ -47,6 +50,8 @@ export async function PATCH(request: NextRequest, { params }: Props) {
 
   const { id } = await params;
   const body = await request.json();
+  const limitError = await checkFeaturedLimit("destination", body.featured, id);
+  if (limitError) return limitError;
 
   const dest = await prisma.destination.update({ where: { id }, data: body });
   return NextResponse.json(dest);

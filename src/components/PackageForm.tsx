@@ -320,7 +320,7 @@ export default function PackageForm({ initialData }: PackageFormProps) {
                 <button
                   type="button"
                   onClick={() => setExistingGallery((prev) => prev.filter((_, idx) => idx !== i))}
-                  className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-500 text-white text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-500 text-white text-xs flex items-center justify-center opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity"
                   title="Remove"
                 >
                   ×
@@ -465,7 +465,7 @@ export default function PackageForm({ initialData }: PackageFormProps) {
       </div>
 
       {/* Toggles */}
-      <div className="flex items-center gap-6">
+      <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
         <label className="flex items-center gap-2 cursor-pointer">
           <input
             type="checkbox"
@@ -490,7 +490,7 @@ export default function PackageForm({ initialData }: PackageFormProps) {
         <p className="text-red-500 text-sm bg-red-50/60 backdrop-blur-sm p-3 rounded-xl border border-red-200/50">{error}</p>
       )}
 
-      <div className="flex items-center gap-4">
+      <div className="flex flex-wrap items-center gap-4">
         <button type="submit" disabled={saving} className="btn-primary disabled:opacity-50">
           {saving ? "Saving..." : isEditing ? "Update Package" : "Create Package"}
         </button>

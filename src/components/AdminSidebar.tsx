@@ -4,12 +4,13 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
-import { FiGrid, FiPackage, FiMapPin, FiLogOut, FiArrowLeft, FiMenu, FiX, FiAlertTriangle } from "react-icons/fi";
+import { FiGrid, FiPackage, FiMapPin, FiLogOut, FiArrowLeft, FiMenu, FiX, FiAlertTriangle, FiTag } from "react-icons/fi";
 
 const links = [
   { href: "/admin/dashboard", label: "Dashboard", icon: FiGrid },
   { href: "/admin/packages", label: "Packages", icon: FiPackage },
   { href: "/admin/destinations", label: "Destinations", icon: FiMapPin },
+  { href: "/admin/categories", label: "Categories", icon: FiTag },
 ];
 
 export default function AdminSidebar() {
@@ -21,6 +22,22 @@ export default function AdminSidebar() {
   useEffect(() => {
     setOpen(false);
   }, [pathname]);
+
+  // Close the drawer with Escape, and when the screen grows to desktop size
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const onResize = () => mq.matches && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    mq.addEventListener("change", onResize);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      mq.removeEventListener("change", onResize);
+    };
+  }, [open]);
+
+  const current = links.find((l) => pathname.startsWith(l.href));
 
   // Prevent body scroll when sidebar is open on mobile
   useEffect(() => {
@@ -35,20 +52,25 @@ export default function AdminSidebar() {
   return (
     <>
       {/* Mobile top bar */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-gray-900/95 backdrop-blur-xl border-b border-white/10 px-4 py-3 flex items-center justify-between">
-        <h2 className="text-white font-display font-bold text-base">Admin Panel</h2>
+      <div className="lg:hidden fixed top-0 inset-x-0 z-40 h-16 bg-gray-900/95 backdrop-blur-xl border-b border-white/10 px-4 flex items-center gap-3">
         <button
-          onClick={() => setOpen(!open)}
-          className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+          onClick={() => setOpen(true)}
+          aria-label="Open menu"
+          aria-expanded={open}
+          className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors shrink-0"
         >
-          {open ? <FiX className="w-5 h-5" /> : <FiMenu className="w-5 h-5" />}
+          <FiMenu className="w-5 h-5" />
         </button>
+        <div className="min-w-0">
+          <p className="text-[10px] uppercase tracking-widest text-gray-400 leading-none">Admin Panel</p>
+          <h2 className="text-white font-display font-bold text-base truncate mt-1">{current?.label ?? "Admin"}</h2>
+        </div>
       </div>
 
       {/* Mobile backdrop */}
       {open && (
         <div
-          className="lg:hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+          className="lg:hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
           onClick={() => setOpen(false)}
         />
       )}
@@ -56,18 +78,25 @@ export default function AdminSidebar() {
       {/* Sidebar */}
       <aside
         className={`
-          fixed lg:sticky top-0 left-0 z-50 lg:z-auto
-          w-72 lg:w-64 h-full lg:h-auto min-h-screen
-          glass-sidebar text-gray-300 p-6 flex flex-col
+          fixed inset-y-0 left-0 z-50
+          w-72 max-w-[85vw] lg:w-64 h-[100dvh]
+          glass-sidebar text-gray-300 p-6 flex flex-col overflow-y-auto overscroll-contain
           transform transition-transform duration-300 ease-out
-          ${open ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
-          pt-20 lg:pt-6
+          ${open ? "translate-x-0 shadow-2xl" : "-translate-x-full lg:translate-x-0"}
         `}
       >
-        {/* Header — desktop only (mobile has top bar) */}
-        <div className="mb-8 hidden lg:block">
-          <h2 className="text-white font-display font-bold text-lg">Admin Panel</h2>
-          <p className="text-xs text-gray-500 mt-1">Manage your tours</p>
+        <div className="mb-8 flex items-start justify-between gap-3">
+          <div>
+            <h2 className="text-white font-display font-bold text-lg">Admin Panel</h2>
+            <p className="text-xs text-gray-500 mt-1">Manage your tours</p>
+          </div>
+          <button
+            onClick={() => setOpen(false)}
+            aria-label="Close menu"
+            className="lg:hidden w-9 h-9 -mr-2 -mt-1 rounded-xl flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+          >
+            <FiX className="w-5 h-5" />
+          </button>
         </div>
 
         <nav className="flex-1 space-y-1">
@@ -78,9 +107,10 @@ export default function AdminSidebar() {
               <Link
                 key={link.href}
                 href={link.href}
+                aria-current={active ? "page" : undefined}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
                   active
-                    ? "bg-primary-900/80 text-white shadow-lg shadow-primary-900/20 backdrop-blur-sm"
+                    ? "bg-white/10 text-white"
                     : "hover:bg-white/10 hover:text-white"
                 }`}
               >

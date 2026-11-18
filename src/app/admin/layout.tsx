@@ -29,9 +29,9 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="flex min-h-screen bg-mesh-light">
+    <div className="min-h-screen bg-mesh-light">
       <AdminSidebar />
-      <div className="flex-1 p-4 pt-20 lg:pt-10 lg:p-10 overflow-auto">{children}</div>
+      <main className="min-w-0 lg:ml-64 px-4 pt-20 pb-10 sm:px-6 lg:p-10">{children}</main>
     </div>
   );
 }

@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import FeaturedToggle from "@/components/FeaturedToggle";
+import { MAX_FEATURED } from "@/lib/featured-limit";
 import { FiPlus, FiEdit, FiTrash2, FiEye, FiEyeOff, FiAlertTriangle, FiX } from "react-icons/fi";
 
 interface Package {
@@ -21,6 +23,8 @@ export default function AdminPackagesPage() {
   const [deleting, setDeleting] = useState(false);
   const [publishTarget, setPublishTarget] = useState<Package | null>(null);
   const [publishing, setPublishing] = useState(false);
+  const [featuringId, setFeaturingId] = useState<string | null>(null);
+  const [featureError, setFeatureError] = useState("");
 
   async function loadPackages() {
     const res = await fetch("/api/packages");
@@ -55,6 +59,25 @@ export default function AdminPackagesPage() {
     loadPackages();
   }
 
+  const featuredCount = packages.filter((x) => x.featured).length;
+  const limitReached = featuredCount >= MAX_FEATURED;
+
+  async function toggleFeatured(target: Package) {
+    setFeaturingId(target.id);
+    setFeatureError("");
+    const res = await fetch(`/api/packages/${target.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ featured: !target.featured }),
+    });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      setFeatureError(data.error || "Failed to update homepage visibility");
+    }
+    await loadPackages();
+    setFeaturingId(null);
+  }
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -72,6 +95,17 @@ export default function AdminPackagesPage() {
           Add Package
         </Link>
       </div>
+
+      <p className="text-sm text-gray-500 -mt-3 sm:-mt-5 mb-4">
+        Featured on homepage:{" "}
+        <span className={`font-semibold ${limitReached ? "text-accent-700" : "text-gray-900"}`}>
+          {featuredCount} / {MAX_FEATURED}
+        </span>
+      </p>
+
+      {featureError && (
+        <p className="text-red-500 text-sm bg-red-50/60 backdrop-blur-sm p-3 rounded-xl border border-red-200/50 mb-4">{featureError}</p>
+      )}
 
       {packages.length === 0 ? (
         <div className="text-center py-20 glass-card">
@@ -92,6 +126,7 @@ export default function AdminPackagesPage() {
                   <th className="text-left py-3 px-4 font-medium text-gray-600">Days</th>
                   <th className="text-left py-3 px-4 font-medium text-gray-600">Price</th>
                   <th className="text-left py-3 px-4 font-medium text-gray-600">Status</th>
+                  <th className="text-left py-3 px-4 font-medium text-gray-600">Featured on Homepage</th>
                   <th className="text-right py-3 px-4 font-medium text-gray-600">Actions</th>
                 </tr>
               </thead>
@@ -100,9 +135,6 @@ export default function AdminPackagesPage() {
                   <tr key={pkg.id} className="hover:bg-white/30 transition-colors">
                     <td className="py-3 px-4">
                       <span className="font-medium text-gray-900">{pkg.title}</span>
-                      {pkg.featured && (
-                        <span className="ml-2 text-xs bg-accent-100 text-accent-700 px-2 py-0.5 rounded-full">Featured</span>
-                      )}
                     </td>
                     <td className="py-3 px-4 text-gray-500">{pkg.durationDays}</td>
                     <td className="py-3 px-4 text-gray-500">{pkg.price ? `US$ ${pkg.price}` : "—"}</td>
@@ -110,6 +142,18 @@ export default function AdminPackagesPage() {
                       <span className={`text-xs font-medium px-2 py-1 rounded-full ${pkg.published ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"}`}>
                         {pkg.published ? "Published" : "Draft"}
                       </span>
+                    </td>
+                    <td className="py-3 px-4">
+                      <div className="flex items-center gap-2">
+                        <FeaturedToggle
+                          checked={pkg.featured}
+                          loading={featuringId === pkg.id}
+                          disabled={!pkg.featured && limitReached}
+                          title={!pkg.featured && limitReached ? `Limit of ${MAX_FEATURED} reached` : undefined}
+                          onChange={() => toggleFeatured(pkg)}
+                        />
+                        <span className="text-xs text-gray-500">{pkg.featured ? "Yes" : "No"}</span>
+                      </div>
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex items-center justify-end gap-2">
@@ -144,11 +188,20 @@ export default function AdminPackagesPage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
-                    {pkg.featured && <span className="text-xs bg-accent-100 text-accent-700 px-2 py-0.5 rounded-full">Featured</span>}
                     <span className={`text-xs font-medium px-2 py-1 rounded-full ${pkg.published ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"}`}>
                       {pkg.published ? "Published" : "Draft"}
                     </span>
                   </div>
+                </div>
+                <div className="flex items-center justify-between gap-3 py-2 border-t border-gray-100">
+                  <span className="text-xs text-gray-600">Featured on homepage</span>
+                  <FeaturedToggle
+                    checked={pkg.featured}
+                    loading={featuringId === pkg.id}
+                    disabled={!pkg.featured && limitReached}
+                    title={!pkg.featured && limitReached ? `Limit of ${MAX_FEATURED} reached` : undefined}
+                    onChange={() => toggleFeatured(pkg)}
+                  />
                 </div>
                 <div className="flex items-center gap-2 pt-2 border-t border-gray-100">
                   <button onClick={() => setPublishTarget(pkg)} className="flex-1 flex items-center justify-center gap-1.5 py-2 text-xs text-gray-500 hover:text-gray-700 rounded-lg hover:bg-gray-100 transition-colors">

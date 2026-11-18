@@ -74,7 +74,7 @@ export default function Footer() {
             {/* Brand */}
             <motion.div className="col-span-2 md:col-span-1 flex items-center" variants={footerCol}>
               <img
-                src="/images/logo-ceylon-aura.png"
+                src="/images/ceylon_elephant_tours_logo.png"
                 alt="Ceylon Aura Tours"
                 className="w-full max-w-[220px] h-auto"
               />
@@ -106,24 +106,6 @@ export default function Footer() {
               </ul>
             </motion.div>
 
-            {/* Destinations */}
-            <motion.div variants={footerCol}>
-              <h4 className="text-xs font-bold uppercase tracking-widest text-accent-400/70 mb-4">
-                Top Destinations
-              </h4>
-              <ul className="space-y-2.5 text-sm">
-                {["Sigiriya", "Kandy", "Ella", "Galle", "Yala"].map((dest) => (
-                  <li key={dest}>
-                    <Link
-                      href={`/destinations/${dest.toLowerCase()}`}
-                      className="text-white/60 hover:text-accent-400 transition-colors duration-200"
-                    >
-                      {dest}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
 
             {/* Contact */}
             <motion.div variants={footerCol}>
@@ -133,14 +115,8 @@ export default function Footer() {
               <ul className="space-y-3 text-sm">
                 <li className="flex items-center gap-2.5">
                   <FiPhone className="w-4 h-4 text-accent-400/60" />
-                  <a href="tel:+94771234567" className="text-white/60 hover:text-accent-400 transition-colors">
-                    +94 77 123 4567
-                  </a>
-                </li>
-                <li className="flex items-center gap-2.5">
-                  <FiMail className="w-4 h-4 text-accent-400/60" />
-                  <a href="mailto:hello@yourdomain.com" className="text-white/60 hover:text-accent-400 transition-colors">
-                    hello@yourdomain.com
+                  <a href="tel:+94752749213" className="text-white/60 hover:text-accent-400 transition-colors">
+                    +94 752749213
                   </a>
                 </li>
                 <li className="flex items-start gap-2.5">

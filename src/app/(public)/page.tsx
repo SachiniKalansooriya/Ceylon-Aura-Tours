@@ -37,7 +37,7 @@ async function getFeaturedPackages() {
   return prisma.package.findMany({
     where: { published: true, featured: true },
     orderBy: { sortOrder: "asc" },
-    take: 6,
+    take: 3,
   });
 }
 
@@ -45,14 +45,21 @@ async function getFeaturedDestinations() {
   return prisma.destination.findMany({
     where: { published: true, featured: true },
     orderBy: { sortOrder: "asc" },
-    take: 6,
+    take: 3,
+  });
+}
+
+async function getCategories() {
+  return prisma.category.findMany({
+    orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
   });
 }
 
 export default async function HomePage() {
-  const [packages, destinations] = await Promise.all([
+  const [packages, destinations, categories] = await Promise.all([
     getFeaturedPackages(),
     getFeaturedDestinations(),
+    getCategories(),
   ]);
 
   const whatsappUrl = buildSimpleWhatsAppUrl("Hi! I'd like to plan a tour of Sri Lanka.");
@@ -120,9 +127,10 @@ export default async function HomePage() {
       </section>
 
       {/* ───── STORY CARDS — Glassy cards with images like srilanka.travel ───── */}
+      {categories.length > 0 && (
       <section className="bg-[#faf9f7]">
         <div className="section-padding section-spacing">
-          <SectionReveal className="text-center mb-14">
+          <SectionReveal className="text-center mb-10 sm:mb-14">
             <span className="section-label">What&apos;s New</span>
             <h2 className="heading-section">
               Stories from Sri Lanka
@@ -132,9 +140,10 @@ export default async function HomePage() {
             </p>
           </SectionReveal>
 
-          <StoryCarousel />
+          <StoryCarousel categories={categories} />
         </div>
       </section>
+      )}
 
       {/* ───── HOW IT WORKS ───── */}
       <section className="bg-white">

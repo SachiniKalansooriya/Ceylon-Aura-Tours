@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { FaWhatsapp } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import { buildSimpleWhatsAppUrl } from "@/lib/whatsapp";
@@ -64,6 +65,9 @@ const menuItemVariants = {
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
   const whatsappUrl = buildSimpleWhatsAppUrl("Hi! I'd like to plan a tour.");
 
   useEffect(() => {
@@ -89,30 +93,29 @@ export default function Navbar() {
       <nav className="section-padding">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            {/* Compass icon mark */}
-            <div className={`w-10 h-10 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
-              showSolid ? "border-primary-900 bg-primary-900" : "border-accent-400 bg-white/10 backdrop-blur-sm"
-            }`}>
-              <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none">
-                <circle cx="12" cy="12" r="9" stroke={showSolid ? "#d4a84b" : "#d4a84b"} strokeWidth="1.2"/>
-                <polygon points="12,5 10.5,11 12,10 13.5,11" fill={showSolid ? "#ffffff" : "#d4a84b"}/>
-                <polygon points="12,19 10.5,13 12,14 13.5,13" fill={showSolid ? "#ffffff" : "#ffffff"} opacity="0.4"/>
-              </svg>
-            </div>
-            <div>
-              <span className={`font-display text-lg font-700 tracking-tight transition-colors duration-300 ${
-                showSolid ? "text-primary-950" : "text-white"
-              }`}>
-                Ceylon <span className={`transition-colors duration-300 ${showSolid ? "text-accent-500" : "text-accent-400"}`}>Aura</span>
-              </span>
-              <span className={`block text-[9px] font-bold uppercase tracking-[0.25em] -mt-0.5 transition-colors duration-300 ${
-                showSolid ? "text-gray-400" : "text-white/50"
-              }`}>
-                Travels
-              </span>
-            </div>
-          </Link>
+<Link href="/" className="flex items-center gap-3 group">
+  <img
+    src="/images/ceylon_elephant_tours_logo.png"
+    alt="Ceylon Elephant Tours"
+    className={`rounded-full object-cover border-2 shadow-md transition-all duration-300 ${
+      showSolid
+        ? "h-11 w-11 lg:h-13 lg:w-13 border-primary-900/20"
+        : "h-10 w-10 lg:h-12 lg:w-12 border-white/30"
+    }`}
+  />
+  <div>
+    <span className={`font-display text-lg font-700 tracking-tight transition-colors duration-300 ${
+      showSolid ? "text-primary-950" : "text-white"
+    }`}>
+      Ceylon <span className={`transition-colors duration-300 ${showSolid ? "text-accent-500" : "text-accent-400"}`}>Elephant</span>
+    </span>
+    <span className={`block text-[9px] font-bold uppercase tracking-[0.25em] -mt-0.5 transition-colors duration-300 ${
+      showSolid ? "text-gray-400" : "text-white/50"
+    }`}>
+      Tours
+    </span>
+  </div>
+</Link>
 
           {/* Desktop Nav */}
           <div className="hidden lg:flex items-center gap-1">
@@ -120,10 +123,15 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
+                aria-current={isActive(link.href) ? "page" : undefined}
                 className={`font-medium text-sm px-4 py-2 rounded-full transition-all duration-300 ${
                   showSolid
-                    ? "text-gray-600 hover:text-primary-900 hover:bg-primary-50"
-                    : "text-white/80 hover:text-white hover:bg-white/10"
+                    ? isActive(link.href)
+                      ? "text-primary-900 bg-primary-50"
+                      : "text-gray-600 hover:text-primary-900 hover:bg-primary-50"
+                    : isActive(link.href)
+                      ? "text-white bg-white/10"
+                      : "text-white/80 hover:text-white hover:bg-white/10"
                 }`}
               >
                 {link.label}
@@ -177,7 +185,12 @@ export default function Navbar() {
                   >
                     <Link
                       href={link.href}
-                      className="block py-3 px-4 text-gray-700 hover:text-primary-900 hover:bg-primary-50 font-medium rounded-2xl transition-colors"
+                      aria-current={isActive(link.href) ? "page" : undefined}
+                      className={`block py-3 px-4 font-medium rounded-2xl transition-colors ${
+                        isActive(link.href)
+                          ? "text-primary-900 bg-primary-50"
+                          : "text-gray-700 hover:text-primary-900 hover:bg-primary-50"
+                      }`}
                       onClick={() => setOpen(false)}
                     >
                       {link.label}

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { prisma } from "@/lib/prisma";
 import { authOptions } from "@/lib/auth";
+import { checkFeaturedLimit } from "@/lib/featured";
 
 export async function GET() {
   const destinations = await prisma.destination.findMany({
@@ -15,6 +16,8 @@ export async function POST(request: NextRequest) {
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const body = await request.json();
+  const limitError = await checkFeaturedLimit("destination", body.featured);
+  if (limitError) return limitError;
 
   const dest = await prisma.destination.create({
     data: {

@@ -61,6 +61,15 @@ model Destination {
   updatedAt   DateTime @updatedAt
 }
 
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  image       String?
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
 model Inquiry {
   id           String   @id @default(cuid())
   name         String?

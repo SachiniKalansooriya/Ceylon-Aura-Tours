@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import slugify from "slugify";
 
@@ -21,18 +21,11 @@ interface DestinationFormProps {
   };
 }
 
-const CATEGORIES = [
-  "Culture & Heritage",
-  "Wildlife & Safari",
-  "Beaches & Ocean",
-  "Hills & Tea Country",
-  "Forts & Towns",
-  "Temples & Ritual",
-];
-
 export default function DestinationForm({ initialData }: DestinationFormProps) {
   const router = useRouter();
   const isEditing = !!initialData?.id;
+
+  const [categories, setCategories] = useState<string[]>([]);
 
   const [form, setForm] = useState({
     name: initialData?.name || "",
@@ -40,7 +33,7 @@ export default function DestinationForm({ initialData }: DestinationFormProps) {
     description: initialData?.description || "",
     shortDesc: initialData?.shortDesc || "",
     image: initialData?.image || "",
-    category: initialData?.category || CATEGORIES[0],
+    category: initialData?.category || "",
     seoTitle: initialData?.seoTitle || "",
     seoDesc: initialData?.seoDesc || "",
     featured: initialData?.featured || false,
@@ -60,6 +53,23 @@ export default function DestinationForm({ initialData }: DestinationFormProps) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
+
+  useEffect(() => {
+    fetch("/api/categories")
+      .then((res) => res.json())
+      .then((data: { name: string }[]) => {
+        const names = data.map((c) => c.name);
+        setCategories(names);
+        setForm((f) => (f.category ? f : { ...f, category: names[0] || "" }));
+      })
+      .catch(() => setCategories([]));
+  }, []);
+
+  // Keep a destination's existing category selectable even if it's not in the list.
+  const categoryOptions =
+    form.category && !categories.includes(form.category)
+      ? [form.category, ...categories]
+      : categories;
 
   function textToJsonArray(text: string): string {
     if (!text.trim()) return "[]";
@@ -154,8 +164,12 @@ export default function DestinationForm({ initialData }: DestinationFormProps) {
           value={form.category}
           onChange={(e) => setForm({ ...form, category: e.target.value })}
           className="glass-input w-full"
+          required
         >
-          {CATEGORIES.map((cat) => (
+          {categoryOptions.length === 0 && (
+            <option value="">No categories — add one under Categories</option>
+          )}
+          {categoryOptions.map((cat) => (
             <option key={cat} value={cat}>{cat}</option>
           ))}
         </select>
@@ -229,7 +243,7 @@ export default function DestinationForm({ initialData }: DestinationFormProps) {
         </div>
       </div>
 
-      <div className="flex items-center gap-6">
+      <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
         <label className="flex items-center gap-2 cursor-pointer">
           <input type="checkbox" checked={form.featured} onChange={(e) => setForm({ ...form, featured: e.target.checked })} className="w-4 h-4 rounded" />
           <span className="text-sm text-gray-700">Featured on homepage</span>
@@ -242,7 +256,7 @@ export default function DestinationForm({ initialData }: DestinationFormProps) {
 
       {error && <p className="text-red-500 text-sm bg-red-50/60 backdrop-blur-sm p-3 rounded-xl border border-red-200/50">{error}</p>}
 
-      <div className="flex items-center gap-4">
+      <div className="flex flex-wrap items-center gap-4">
         <button type="submit" disabled={saving} className="btn-primary disabled:opacity-50">
           {saving ? "Saving..." : isEditing ? "Update Destination" : "Create Destination"}
         </button>

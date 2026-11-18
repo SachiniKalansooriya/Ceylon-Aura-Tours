@@ -3,6 +3,7 @@ import DestinationCard from "@/components/DestinationCard";
 import { prisma } from "@/lib/prisma";
 import PageHero from "@/components/PageHero";
 import ScrollReveal from "@/components/motion/ScrollReveal";
+import slugify from "slugify";
 
 export const metadata: Metadata = {
   title: "Destinations | Explore Sri Lanka",
@@ -40,7 +41,7 @@ export default async function DestinationsPage() {
           </div>
         ) : (
           Object.entries(grouped).map(([category, dests]: [string, any[]]) => (
-            <div key={category} className="mb-16">
+            <div key={category} id={slugify(category, { lower: true, strict: true })} className="mb-16 scroll-mt-28">
               <ScrollReveal>
                 <h2 className="heading-section text-2xl mb-2">{category}</h2>
                 <div className="divider mb-8" />

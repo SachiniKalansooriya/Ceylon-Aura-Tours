@@ -41,7 +41,7 @@ export default function AdminLoginPage() {
       <div className="relative glass-card p-8 w-full max-w-md">
         <div className="text-center mb-8">
           <Image
-            src="/images/logo-ceylon-aura.png"
+            src="/images/ceylon_elephant_tours_logo.png"
             alt="Ceylon Aura Tours"
             width={160}
             height={60}

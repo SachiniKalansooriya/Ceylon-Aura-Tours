@@ -87,7 +87,7 @@ export default function ContactPage() {
                 </div>
                 <div className="mt-4 flex items-center justify-between">
                   <span className="text-white font-semibold">
-                    +94 77 123 4567
+                    +94 752749213
                   </span>
                   <span className="inline-flex items-center gap-1.5 bg-white/20 text-white text-xs font-bold px-3 py-1.5 rounded-full group-hover:bg-white/30 transition-colors">
                     <FiMessageCircle className="w-3.5 h-3.5" />
@@ -98,7 +98,7 @@ export default function ContactPage() {
 
               {/* Phone */}
               <a
-                href="tel:+94771234567"
+                href="tel:+94752749213"
                 className="group flex items-center gap-4 bg-white rounded-2xl p-5 border border-gray-100 hover:border-primary-900/20 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
               >
                 <div className="w-12 h-12 rounded-xl bg-primary-950 flex items-center justify-center flex-shrink-0">
@@ -109,7 +109,7 @@ export default function ContactPage() {
                     Phone
                   </h3>
                   <p className="text-primary-900 font-semibold mt-0.5">
-                    +94 77 123 4567
+                    +94 75 274 9213
                   </p>
                 </div>
               </a>
