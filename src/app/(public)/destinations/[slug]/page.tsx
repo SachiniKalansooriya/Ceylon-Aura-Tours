@@ -7,6 +7,8 @@ import { FiArrowLeft, FiCheck, FiArrowUpRight } from "react-icons/fi";
 import { prisma } from "@/lib/prisma";
 import { parseJSON } from "@/lib/helpers";
 import { buildSimpleWhatsAppUrl } from "@/lib/whatsapp";
+import JsonLd from "@/components/JsonLd";
+import { absoluteUrl, breadcrumbJsonLd, defaultShareImage, metaDescription } from "@/lib/seo";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -20,9 +22,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const dest = await getDestination(slug);
   if (!dest) return {};
+  const title = dest.seoTitle || `${dest.name} | Destination Guide`;
+  const description = metaDescription(dest.seoDesc || dest.description);
+  const image = dest.image || defaultShareImage;
   return {
-    title: dest.seoTitle || `${dest.name} | Destination Guide`,
-    description: dest.seoDesc || dest.description.slice(0, 160),
+    title,
+    description,
+    alternates: { canonical: `/destinations/${dest.slug}` },
+    openGraph: {
+      type: "article",
+      title,
+      description,
+      url: `/destinations/${dest.slug}`,
+      images: [{ url: image, alt: dest.name }],
+    },
+    twitter: { card: "summary_large_image", title, description, images: [image] },
   };
 }
 
@@ -50,8 +64,30 @@ export default async function DestinationDetailPage({ params }: Props) {
     take: 3,
   });
 
+  const structuredData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "TouristDestination",
+      name: dest.name,
+      description: metaDescription(dest.description, 300),
+      url: absoluteUrl(`/destinations/${dest.slug}`),
+      ...(dest.image && { image: absoluteUrl(dest.image) }),
+      ...(dest.category && { touristType: dest.category }),
+      containedInPlace: { "@type": "Country", name: "Sri Lanka" },
+      ...(highlights.length > 0 && {
+        includesAttraction: highlights.map((name) => ({ "@type": "TouristAttraction", name })),
+      }),
+    },
+    breadcrumbJsonLd([
+      { name: "Home", path: "/" },
+      { name: "Destinations", path: "/destinations" },
+      { name: dest.name, path: `/destinations/${dest.slug}` },
+    ]),
+  ];
+
   return (
     <div className="min-h-screen bg-[#faf9f7]">
+      <JsonLd data={structuredData} />
       {/* ───── Hero Section ───── */}
       <section className="relative h-[50vh] sm:h-[55vh] lg:h-[60vh] overflow-hidden">
         {/* Background image from admin */}

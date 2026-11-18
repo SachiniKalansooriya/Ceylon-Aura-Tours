@@ -16,6 +16,7 @@ const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "Ceylon Aura Tours";
 export const metadata: Metadata = {
   title: "Contact Us",
   description: `Get in touch with ${siteName}. Reach us on WhatsApp, phone, or email. We reply within hours.`,
+  alternates: { canonical: "/contact" },
 };
 
 export default function ContactPage() {

@@ -7,6 +7,8 @@ import { prisma } from "@/lib/prisma";
 import { parseJSON, formatPrice } from "@/lib/helpers";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import PackageGallery from "@/components/PackageGallery";
+import JsonLd from "@/components/JsonLd";
+import { absoluteUrl, breadcrumbJsonLd, defaultShareImage, metaDescription, siteName, siteUrl } from "@/lib/seo";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -20,9 +22,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const pkg = await getPackage(slug);
   if (!pkg) return {};
+  const title = pkg.seoTitle || `${pkg.title} | Tour Package`;
+  const description = metaDescription(pkg.seoDesc || pkg.description);
+  const image = pkg.image || defaultShareImage;
   return {
-    title: pkg.seoTitle || `${pkg.title} | Tour Package`,
-    description: pkg.seoDesc || pkg.description.slice(0, 160),
+    title,
+    description,
+    alternates: { canonical: `/packages/${pkg.slug}` },
+    openGraph: {
+      type: "article",
+      title,
+      description,
+      url: `/packages/${pkg.slug}`,
+      images: [{ url: image, alt: pkg.title }],
+    },
+    twitter: { card: "summary_large_image", title, description, images: [image] },
   };
 }
 
@@ -56,8 +70,46 @@ export default async function PackageDetailPage({ params }: Props) {
 
   const whatsappUrl = buildWhatsAppUrl(destinations, undefined, undefined, undefined, pkg.title);
 
+  const structuredData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "TouristTrip",
+      name: pkg.title,
+      description: metaDescription(pkg.description, 300),
+      url: absoluteUrl(`/packages/${pkg.slug}`),
+      ...(galleryImages.length > 0 && { image: galleryImages.map(absoluteUrl) }),
+      touristType: "Private tour",
+      ...(destinations.length > 0 && {
+        itinerary: {
+          "@type": "ItemList",
+          itemListElement: destinations.map((name, i) => ({
+            "@type": "ListItem",
+            position: i + 1,
+            item: { "@type": "TouristDestination", name },
+          })),
+        },
+      }),
+      ...(pkg.price != null && {
+        offers: {
+          "@type": "Offer",
+          price: pkg.price,
+          priceCurrency: "USD",
+          availability: "https://schema.org/InStock",
+          url: absoluteUrl(`/packages/${pkg.slug}`),
+        },
+      }),
+      provider: { "@type": "TravelAgency", "@id": `${siteUrl}/#organization`, name: siteName, url: siteUrl },
+    },
+    breadcrumbJsonLd([
+      { name: "Home", path: "/" },
+      { name: "Tour Packages", path: "/packages" },
+      { name: pkg.title, path: `/packages/${pkg.slug}` },
+    ]),
+  ];
+
   return (
     <div className="bg-mesh-light min-h-screen">
+      <JsonLd data={structuredData} />
       <div className="section-padding pt-28 pb-12">
         {/* Breadcrumb */}
         <Link

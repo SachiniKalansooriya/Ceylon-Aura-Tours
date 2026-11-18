@@ -9,7 +9,8 @@ const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "Ceylon Elephant Tours";
 
 export const metadata: Metadata = {
   title: "About Us | Our Story",
-  description: `Learn about ${siteName}. We offer private, fully customizable tours across Sri Lanka — led by experienced local drivers who know the island inside out.`,
+  description: `Learn about ${siteName}. We offer private, fully customizable tours across Sri Lanka — led by experienced local drivers who know the island inside out.`,
+  alternates: { canonical: "/about" },
 };
 
 const values = [

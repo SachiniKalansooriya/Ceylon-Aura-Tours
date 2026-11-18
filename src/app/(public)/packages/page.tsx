@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Tour Packages | Sri Lanka Private Tours",
   description:
     "Browse our curated Sri Lanka tour packages. From 3-day getaways to 14-day adventures. Private vehicles, trusted drivers, customizable itineraries.",
+  alternates: { canonical: "/packages" },
 };
 
 export const revalidate = 60;

@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "Destinations | Explore Sri Lanka",
   description:
     "Explore 40+ destinations across Sri Lanka. Ancient temples, wildlife safaris, pristine beaches, misty hill country, colonial forts and more.",
+  alternates: { canonical: "/destinations" },
 };
 
 export const revalidate = 60;

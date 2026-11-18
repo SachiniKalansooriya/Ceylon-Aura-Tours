@@ -30,6 +30,13 @@ import HeroVideo from "@/components/HeroVideo";
 import StoryCarousel from "@/components/StoryCarousel";
 import ReviewsSection from "@/components/ReviewsSection";
 import { buildSimpleWhatsAppUrl } from "@/lib/whatsapp";
+import type { Metadata } from "next";
+import JsonLd from "@/components/JsonLd";
+import { absoluteUrl, defaultShareImage, logoPath, siteUrl } from "@/lib/seo";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export const revalidate = 60;
 
@@ -357,23 +364,34 @@ export default async function HomePage() {
       <div className="h-16 sm:h-20 bg-[#faf9f7]" />
 
       {/* JSON-LD */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+      <JsonLd
+        data={[
+          {
             "@context": "https://schema.org",
             "@type": "TravelAgency",
+            "@id": `${siteUrl}/#organization`,
             name: siteName,
             description:
               "Private, customizable tour packages in Sri Lanka. Visit Sigiriya, Kandy, Ella, Galle and more.",
-            url: process.env.NEXT_PUBLIC_SITE_URL,
-            areaServed: {
-              "@type": "Country",
-              name: "Sri Lanka",
-            },
+            url: siteUrl,
+            logo: absoluteUrl(logoPath),
+            image: absoluteUrl(defaultShareImage),
+            ...(process.env.NEXT_PUBLIC_WHATSAPP_NUMBER && {
+              telephone: `+${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER.replace(/\D/g, "")}`,
+            }),
+            address: { "@type": "PostalAddress", addressCountry: "LK" },
+            areaServed: { "@type": "Country", name: "Sri Lanka" },
             priceRange: "$$",
-          }),
-        }}
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "@id": `${siteUrl}/#website`,
+            name: siteName,
+            url: siteUrl,
+            publisher: { "@id": `${siteUrl}/#organization` },
+          },
+        ]}
       />
     </>
   );

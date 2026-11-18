@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
+import type { Viewport } from "next";
 import "./globals.css";
+import { siteName, siteUrl, defaultShareImage } from "@/lib/seo";
 
-const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "Ceylon Aura Travels";
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+export const viewport: Viewport = {
+  themeColor: "#0a1628",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -22,6 +25,8 @@ export const metadata: Metadata = {
     "Ella tours",
     "Sri Lanka tour packages",
   ],
+  applicationName: siteName,
+  category: "travel",
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -30,12 +35,14 @@ export const metadata: Metadata = {
     title: `${siteName} | Private Tours & Travel in Sri Lanka`,
     description:
       "Discover Sri Lanka with private, customizable tour packages. Plan your dream trip today.",
+    images: [{ url: defaultShareImage, alt: `${siteName} — Sri Lanka tours` }],
   },
   twitter: {
     card: "summary_large_image",
     title: `${siteName} | Private Tours in Sri Lanka`,
     description:
       "Private, customizable Sri Lanka tours. Sigiriya, Kandy, Ella, Galle and more.",
+    images: [defaultShareImage],
   },
   robots: {
     index: true,

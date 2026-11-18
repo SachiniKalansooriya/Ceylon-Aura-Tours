@@ -6,7 +6,8 @@ import { prisma } from "@/lib/prisma";
 export const metadata: Metadata = {
   title: "Plan Your Trip | Build Your Custom Sri Lanka Tour",
   description:
-    "Select your dream destinations and get a personalized Sri Lanka tour quote via WhatsApp. Pick from 40+ destinations across culture, wildlife, beaches and more.",
+    "Select your dream destinations and get a personalized Sri Lanka tour quote via WhatsApp. Pick from 40+ destinations across culture, wildlife, beaches and more.",
+  alternates: { canonical: "/plan" },
 };
 
 export const revalidate = 60;
