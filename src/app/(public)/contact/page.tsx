@@ -6,10 +6,10 @@ import {
   FiMail,
   FiMapPin,
   FiClock,
-  FiSend,
   FiMessageCircle,
 } from "react-icons/fi";
 import { buildSimpleWhatsAppUrl } from "@/lib/whatsapp";
+import ContactForm from "@/components/ContactForm";
 
 const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "Ceylon Aura Tours";
 
@@ -171,83 +171,11 @@ export default function ContactPage() {
                   Send Us a Message
                 </h2>
                 <p className="text-gray-400 text-sm mb-8">
-                  Fill out the form below and we&apos;ll get back to you within
-                  a few hours.
+                  Fill out the form below and it will open WhatsApp with your
+                  message ready to send. We reply within a few hours.
                 </p>
 
-                <form className="space-y-5">
-                  {/* Name & Email row */}
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                        Full Name
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="John Smith"
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 placeholder:text-gray-300 focus:border-primary-900/40 focus:ring-2 focus:ring-primary-900/10 focus:bg-white outline-none transition-all duration-200"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                        Email
-                      </label>
-                      <input
-                        type="email"
-                        placeholder="john@example.com"
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 placeholder:text-gray-300 focus:border-primary-900/40 focus:ring-2 focus:ring-primary-900/10 focus:bg-white outline-none transition-all duration-200"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Travel dates & Group size */}
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                        Travel Dates
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="e.g. Dec 2026"
-                        className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 placeholder:text-gray-300 focus:border-primary-900/40 focus:ring-2 focus:ring-primary-900/10 focus:bg-white outline-none transition-all duration-200"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                        Group Size
-                      </label>
-                      <select className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 focus:border-primary-900/40 focus:ring-2 focus:ring-primary-900/10 focus:bg-white outline-none transition-all duration-200 appearance-none">
-                        <option value="">Select</option>
-                        <option value="1">Solo traveller</option>
-                        <option value="2">2 people</option>
-                        <option value="3-4">3–4 people</option>
-                        <option value="5-8">5–8 people</option>
-                        <option value="9+">9+ people</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  {/* Message */}
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                      Your Message
-                    </label>
-                    <textarea
-                      rows={5}
-                      placeholder="Tell us about your dream Sri Lanka trip — destinations, interests, budget…"
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 placeholder:text-gray-300 focus:border-primary-900/40 focus:ring-2 focus:ring-primary-900/10 focus:bg-white outline-none transition-all duration-200 resize-none"
-                    />
-                  </div>
-
-                  {/* Submit */}
-                  <button
-                    type="submit"
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-primary-900 text-white px-8 py-3.5 rounded-full font-bold text-base hover:bg-primary-950 transition-all duration-300 shadow-lg shadow-primary-900/15 hover:-translate-y-0.5"
-                  >
-                    <FiSend className="w-4 h-4" />
-                    Send Message
-                  </button>
-                </form>
+                <ContactForm />
               </div>
 
               {/* Bottom note */}
