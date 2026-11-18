@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { prisma } from "@/lib/prisma";
 import { authOptions } from "@/lib/auth";
+import { toSlug } from "@/lib/category-slug";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -24,12 +25,22 @@ export async function PUT(request: NextRequest, { params }: Props) {
     if (clash) return NextResponse.json({ error: "Category already exists" }, { status: 409 });
   }
 
+  const slug = toSlug(String(body.slug ?? "").trim() || name).slice(0, 100);
+  if (!slug) return NextResponse.json({ error: "Slug must contain letters or numbers" }, { status: 400 });
+  if (slug !== current.slug) {
+    const slugTaken = await prisma.category.findUnique({ where: { slug } });
+    if (slugTaken && slugTaken.id !== id) {
+      return NextResponse.json({ error: `The slug "${slug}" is already used by "${slugTaken.name}"` }, { status: 409 });
+    }
+  }
+
   // Destinations store the category by name, so rename them along with it.
   const [category] = await prisma.$transaction([
     prisma.category.update({
       where: { id },
       data: {
         name,
+        slug,
         description: String(body.description ?? "").trim().slice(0, 500) || null,
         image: body.image || null,
       },

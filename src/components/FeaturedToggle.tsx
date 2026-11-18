@@ -5,17 +5,18 @@ interface FeaturedToggleProps {
   disabled?: boolean;
   loading?: boolean;
   title?: string;
+  label?: string;
   onChange: () => void;
 }
 
 /** Small on/off switch for "Featured on homepage". */
-export default function FeaturedToggle({ checked, disabled, loading, title, onChange }: FeaturedToggleProps) {
+export default function FeaturedToggle({ checked, disabled, loading, title, label = "Featured on homepage", onChange }: FeaturedToggleProps) {
   return (
     <button
       type="button"
       role="switch"
       aria-checked={checked}
-      aria-label="Featured on homepage"
+      aria-label={label}
       title={title}
       onClick={onChange}
       disabled={disabled || loading}

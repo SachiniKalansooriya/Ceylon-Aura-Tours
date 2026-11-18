@@ -1,8 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
 import { prisma } from "@/lib/prisma";
+import { authOptions } from "@/lib/auth";
 
-export async function GET() {
+/**
+ * Public: the latest reviews that are switched on.
+ * Admin (?all=1 with a session): every review, including hidden ones.
+ */
+export async function GET(request: NextRequest) {
+  if (request.nextUrl.searchParams.get("all") === "1") {
+    const session = await getServerSession(authOptions);
+    if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const reviews = await prisma.review.findMany({ orderBy: { createdAt: "desc" } });
+    return NextResponse.json(reviews);
+  }
+
   const reviews = await prisma.review.findMany({
+    where: { published: true },
     orderBy: { createdAt: "desc" },
     take: 50,
   });

@@ -10,6 +10,7 @@
 
 import { createClient } from "@libsql/client";
 import { hash } from "bcryptjs";
+import slugify from "slugify";
 
 const url = process.env.TURSO_DATABASE_URL;
 const authToken = process.env.TURSO_AUTH_TOKEN;
@@ -101,7 +102,7 @@ async function main() {
     )
   `);
   // Add columns if the Category table was created before they existed
-  for (const col of ["description", "image"]) {
+  for (const col of ["description", "image", "slug"]) {
     try {
       await client.execute(`ALTER TABLE Category ADD COLUMN ${col} TEXT`);
     } catch {
@@ -114,6 +115,19 @@ async function main() {
     SELECT 'cat_' || lower(hex(randomblob(10))), category
     FROM (SELECT DISTINCT category FROM Destination WHERE category IS NOT NULL AND category <> '')
   `);
+  await client.execute(`CREATE UNIQUE INDEX IF NOT EXISTS Category_slug_key ON Category(slug)`);
+  // Give categories without a slug one made from their name
+  const noSlug = await client.execute(`SELECT id, name FROM Category WHERE slug IS NULL OR slug = ''`);
+  const used = new Set(
+    (await client.execute(`SELECT slug FROM Category WHERE slug IS NOT NULL AND slug <> ''`)).rows.map((r) => String(r.slug))
+  );
+  for (const row of noSlug.rows) {
+    const base = slugify(String(row.name), { lower: true, strict: true }) || "category";
+    let slug = base;
+    for (let n = 2; used.has(slug); n++) slug = `${base}-${n}`;
+    used.add(slug);
+    await client.execute({ sql: `UPDATE Category SET slug = ? WHERE id = ?`, args: [slug, row.id] });
+  }
   console.log("  ✅ Category table created");
 
   await client.execute(`
@@ -148,9 +162,16 @@ async function main() {
       country TEXT NOT NULL,
       comment TEXT NOT NULL,
       rating INTEGER NOT NULL DEFAULT 5,
+      published BOOLEAN NOT NULL DEFAULT 1,
       createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
     )
   `);
+  // Add the "show on site" flag to Review tables created before it existed
+  try {
+    await client.execute(`ALTER TABLE Review ADD COLUMN published BOOLEAN NOT NULL DEFAULT 1`);
+  } catch {
+    // column already exists
+  }
   console.log("  ✅ Review table created");
 
   await client.execute(`

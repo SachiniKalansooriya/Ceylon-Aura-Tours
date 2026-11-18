@@ -2,15 +2,17 @@
 
 import { useEffect, useState } from "react";
 import { FiPlus, FiEdit, FiTrash2, FiX, FiAlertTriangle, FiImage } from "react-icons/fi";
+import { categorySlug, toSlug } from "@/lib/category-slug";
 
 interface Category {
   id: string;
   name: string;
+  slug: string | null;
   description: string | null;
   image: string | null;
 }
 
-const emptyForm = { name: "", description: "", image: "" };
+const emptyForm = { name: "", slug: "", description: "", image: "" };
 
 export default function AdminCategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -20,6 +22,8 @@ export default function AdminCategoriesPage() {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [fileInputKey, setFileInputKey] = useState(0);
   const [editId, setEditId] = useState<string | null>(null);
+  // Keep the slug following the name until the admin types their own
+  const [slugEdited, setSlugEdited] = useState(false);
   const [saving, setSaving] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<Category | null>(null);
   const [deleting, setDeleting] = useState(false);
@@ -53,11 +57,13 @@ export default function AdminCategoriesPage() {
     setImageFile(null);
     setFileInputKey((k) => k + 1);
     setEditId(null);
+    setSlugEdited(false);
   }
 
   function startEdit(c: Category) {
     setEditId(c.id);
-    setForm({ name: c.name, description: c.description || "", image: c.image || "" });
+    setForm({ name: c.name, slug: categorySlug(c), description: c.description || "", image: c.image || "" });
+    setSlugEdited(true);
     setImageFile(null);
     setFileInputKey((k) => k + 1);
     setError("");
@@ -84,7 +90,7 @@ export default function AdminCategoriesPage() {
       const res = await fetch(editId ? `/api/categories/${editId}` : "/api/categories", {
         method: editId ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, image: imagePath }),
+        body: JSON.stringify({ ...form, slug: toSlug(form.slug) || toSlug(form.name), image: imagePath }),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
@@ -143,12 +149,39 @@ export default function AdminCategoriesPage() {
           <input
             type="text"
             value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })}
+            onChange={(e) => {
+              const name = e.target.value;
+              setForm({ ...form, name, slug: slugEdited ? form.slug : toSlug(name) });
+            }}
             className="glass-input w-full"
             placeholder="e.g. Wildlife & Safari"
             maxLength={100}
             required
           />
+        </div>
+
+        <div>
+          <label htmlFor="cat-slug" className="block text-sm font-medium text-gray-700 mb-1">Slug *</label>
+          <div className="flex items-center rounded-xl overflow-hidden">
+            <span className="text-sm text-gray-400 shrink-0 pr-2 hidden sm:inline">/destinations#</span>
+            <input
+              id="cat-slug"
+              type="text"
+              value={form.slug}
+              onChange={(e) => {
+                setSlugEdited(true);
+                setForm({ ...form, slug: e.target.value.toLowerCase().replace(/\s+/g, "-") });
+              }}
+              onBlur={() => setForm((f) => ({ ...f, slug: toSlug(f.slug) || toSlug(f.name) }))}
+              className="glass-input w-full min-w-0"
+              placeholder="e.g. wildlife-and-safari"
+              maxLength={100}
+              required
+            />
+          </div>
+          <p className="text-xs text-gray-500 mt-1">
+            Used in links to this category. Lowercase letters, numbers and dashes only; filled in from the name automatically.
+          </p>
         </div>
 
         <div>
@@ -209,6 +242,7 @@ export default function AdminCategoriesPage() {
                 )}
                 <div className="flex-1 min-w-0">
                   <p className="font-medium text-gray-900 text-sm truncate">{c.name}</p>
+                  <p className="text-xs text-gray-400 font-mono truncate">/{categorySlug(c)}</p>
                   {c.description && (
                     <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">{c.description}</p>
                   )}

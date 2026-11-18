@@ -3,7 +3,7 @@ import DestinationCard from "@/components/DestinationCard";
 import { prisma } from "@/lib/prisma";
 import PageHero from "@/components/PageHero";
 import ScrollReveal from "@/components/motion/ScrollReveal";
-import slugify from "slugify";
+import { categorySlug, toSlug } from "@/lib/category-slug";
 
 export const metadata: Metadata = {
   title: "Destinations | Explore Sri Lanka",
@@ -15,10 +15,14 @@ export const metadata: Metadata = {
 export const revalidate = 60;
 
 export default async function DestinationsPage() {
-  const destinations = await prisma.destination.findMany({
-    where: { published: true },
-    orderBy: { sortOrder: "asc" },
-  });
+  const [destinations, categories] = await Promise.all([
+    prisma.destination.findMany({
+      where: { published: true },
+      orderBy: { sortOrder: "asc" },
+    }),
+    prisma.category.findMany({ select: { name: true, slug: true } }),
+  ]);
+  const slugByName = new Map(categories.map((c) => [c.name, categorySlug(c)]));
 
   const grouped: Record<string, any[]> = {};
   destinations.forEach((dest: any) => {
@@ -42,7 +46,7 @@ export default async function DestinationsPage() {
           </div>
         ) : (
           Object.entries(grouped).map(([category, dests]: [string, any[]]) => (
-            <div key={category} id={slugify(category, { lower: true, strict: true })} className="mb-16 scroll-mt-28">
+            <div key={category} id={slugByName.get(category) ?? toSlug(category)} className="mb-16 scroll-mt-28">
               <ScrollReveal>
                 <h2 className="heading-section text-2xl mb-2">{category}</h2>
                 <div className="divider mb-8" />

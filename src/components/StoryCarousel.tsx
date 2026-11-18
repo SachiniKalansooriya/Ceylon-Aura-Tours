@@ -2,12 +2,13 @@
 
 import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
-import slugify from "slugify";
+import { categorySlug } from "@/lib/category-slug";
 import { FiArrowUpRight, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 export interface StoryCategory {
   id: string;
   name: string;
+  slug?: string | null;
   description: string | null;
   image: string | null;
 }
@@ -77,7 +78,7 @@ export default function StoryCarousel({ categories }: { categories: StoryCategor
         {categories.map((cat) => (
           <Link
             key={cat.id}
-            href={`/destinations#${slugify(cat.name, { lower: true, strict: true })}`}
+            href={`/destinations#${categorySlug(cat)}`}
             className="story-slide story-card block group flex-shrink-0 snap-start w-[85%] sm:w-[calc(50%-10px)] lg:w-[calc(33.333%-13.34px)] xl:w-[calc(25%-15px)] !min-h-[360px] sm:!min-h-[420px]"
           >
             {/* Background image */}

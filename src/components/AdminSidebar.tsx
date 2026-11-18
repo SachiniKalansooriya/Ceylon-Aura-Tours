@@ -4,13 +4,14 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
-import { FiGrid, FiPackage, FiMapPin, FiLogOut, FiArrowLeft, FiMenu, FiX, FiAlertTriangle, FiTag } from "react-icons/fi";
+import { FiGrid, FiPackage, FiMapPin, FiLogOut, FiArrowLeft, FiMenu, FiX, FiAlertTriangle, FiTag, FiStar } from "react-icons/fi";
 
 const links = [
   { href: "/admin/dashboard", label: "Dashboard", icon: FiGrid },
   { href: "/admin/packages", label: "Packages", icon: FiPackage },
   { href: "/admin/destinations", label: "Destinations", icon: FiMapPin },
   { href: "/admin/categories", label: "Categories", icon: FiTag },
+  { href: "/admin/reviews", label: "Reviews", icon: FiStar },
 ];
 
 export default function AdminSidebar() {
